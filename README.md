@@ -1,39 +1,28 @@
-# 🧑‍🍳 Chef RAG - Sistema Inteligente de Receitas
+# 🍳 Chef RAG v2 - Sistema Inteligente de Culinária
 
-Sistema de Retrieval-Augmented Generation (RAG) que analisa ingredientes em imagens e sugere receitas baseadas em um livro de culinária utilizando IA.
+Um sistema avançado de assistente culinário que combina Inteligência Artificial, sistemas inspirados no LangChain/LangGraph, RAG (Retrieval-Augmented Generation) e análise de imagens para oferecer uma experiência culinária completa e personalizada.
 
-## 🚀 Como Usar
+## ✨ Principais Funcionalidades
 
-### Inicialização Rápida
-```bash
-# Ative o ambiente virtual
-venv\Scripts\activate
+### 🧠 Sistemas Inteligentes (LangChain/LangGraph Inspired)
+- **ChefAgent**: Agente inteligente com ferramentas especializadas
+- **ChefWorkflow**: Pipeline de processamento de 7 etapas
+- **SimpleRAGSystem**: Sistema RAG avançado para consultas inteligentes
+- **ChefMemory**: Gerenciamento de memória e contexto
 
-# Execute o launcher
-python launcher.py
-```
+### 📱 Interfaces Múltiplas
+- **Web Interface**: React/Vite moderna
+- **Mobile App**: React Native multiplataforma  
+- **API REST**: APIs completas para integração
+- **CLI**: Interface de linha de comando
 
-O launcher oferece duas opções:
-
-**1️⃣ Modo Terminal (IDE)**
-- Interface de linha de comando
-- Execução direta na IDE
-- Rápido e simples para desenvolvedores
-
-**2️⃣ Modo Web (localhost)**
-- Interface gráfica moderna
-- Webcam integrada
-- Gerenciamento de livros
-- Acesso via navegador
-
-## 🌟 Funcionalidades
-
-- 📷 **Análise por Webcam**: Capture ingredientes em tempo real
-- 📁 **Upload de Imagens**: Envie fotos do seu computador  
-- 🧠 **IA Avançada**: Usa Google Gemini para identificação e busca
-- 📊 **Histórico Completo**: Todas as análises são salvas automaticamente
-- 🌐 **Interface Web**: Frontend React moderno e responsivo
-- 📡 **API REST**: Backend Flask para integração
+### 🔍 IA Avançada
+- Análise inteligente de imagens de alimentos
+- Reconhecimento de ingredientes por foto
+- Sugestões de receitas personalizadas
+- Cálculo automático de nutrição
+- Geração de listas de compras
+- Timer inteligente para receitas
 
 ## 🏗️ Arquitetura
 
