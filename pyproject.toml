@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "chef_rag"
+version = "0.1.0"
+description = "Um agente RAG que lê PDFs de culinária e sugere receitas a partir de imagens."
+authors = ["vitoriaayres <vitoriaayres@gmail.com >"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10" # Requer Python 3.10 ou superior
+python-dotenv = "^1.0.1"     # Para ler o arquivo .env
+pdfplumber = "^0.11.1"       # Para ler o PDF
+chromadb = "^0.5.3"          # Banco de dados vetorial local
+google-generativeai = "^0.7.1" # Para o cérebro (Gemini) e visão
+watchdog = "^4.0.1"          # Para monitorar a pasta
+pillow = "^10.4.0"           # Para carregar imagens
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

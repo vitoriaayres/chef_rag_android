@@ -1,0 +1,94 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+.env/
+
+# Environment Variables
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project Specific
+# Base de dados vetorial (muito grande para versionar)
+core_logic/chroma_db/
+data/chroma_db/
+
+# Histórico de análises (dados pessoais)
+data/history.db
+data/history_export.json
+
+# Imagens temporárias
+temp_snapshot.jpg
+*.tmp
+*.temp
+
+# PDFs (podem ser grandes e ter direitos autorais)
+data/pdf/*.pdf
+
+# Imagens de teste (podem conter dados pessoais)
+data/imagens/*.jpg
+data/imagens/*.png
+data/imagens/*.jpeg
+data/imagens/*.gif
+data/imagens/*.bmp
+data/imagens/*.tiff
+
+# Logs
+*.log
+logs/
+
+# Poetry
+poetry.lock
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
