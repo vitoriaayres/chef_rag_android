@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef RAG Mobile - Simulador Android</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .phone-container {
+            width: 400px;
+            height: 800px;
+            background: #2d2d2d;
+            border-radius: 40px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 30px;
+            background: #1976d2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .app-content {
+            height: calc(100% - 30px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .loading-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f5f5f5;
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .app-frame {
+            flex: 1;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #1565c0;
+        }
+        
+        .status {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1976d2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            color: #f44336;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="status">
+            <h2>🚀 Chef RAG Mobile - Simulador Android</h2>
+            <p id="status-text">Preparando simulador...</p>
+        </div>
+        
+        <div class="phone-container">
+            <div class="screen">
+                <div class="status-bar">
+                    <span>📶 Chef RAG</span>
+                    <span>🔋 100%</span>
+                </div>
+                <div class="app-content">
+                    <div class="loading-screen" id="loading-screen">
+                        <div class="spinner"></div>
+                        <div class="loading-text">Conectando ao React Native...</div>
+                    </div>
+                    <iframe id="app-frame" class="app-frame" style="display: none;"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="startApp()">🚀 Iniciar App</button>
+            <button class="btn" onclick="openWeb()">🌐 Abrir Web</button>
+            <button class="btn" onclick="checkAPI()">🔧 Testar API</button>
+            <button class="btn" onclick="reload()">🔄 Recarregar</button>
+        </div>
+    </div>
+
+    <script>
+        let appStarted = false;
+        
+        async function startApp() {
+            const statusText = document.getElementById('status-text');
+            const loadingScreen = document.getElementById('loading-screen');
+            const appFrame = document.getElementById('app-frame');
+            
+            statusText.textContent = 'Iniciando Metro Bundler...';
+            
+            try {
+                // Tentar conectar no Metro
+                const response = await fetch('http://localhost:8081');
+                if (response.ok) {
+                    statusText.textContent = 'Conectado! Carregando app...';
+                    appFrame.src = 'http://localhost:8081';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        appFrame.style.display = 'block';
+                        statusText.textContent = 'App carregado com sucesso!';
+                        appStarted = true;
+                    }, 2000);
+                } else {
+                    throw new Error('Metro não encontrado');
+                }
+            } catch (error) {
+                // Tentar porta alternativa
+                try {
+                    const response2 = await fetch('http://localhost:8082');
+                    if (response2.ok) {
+                        appFrame.src = 'http://localhost:8082';
+                        loadingScreen.style.display = 'none';
+                        appFrame.style.display = 'block';
+                        statusText.textContent = 'App carregado (porta 8082)!';
+                        appStarted = true;
+                        return;
+                    }
+                } catch (e) {}
+                
+                statusText.textContent = '❌ Metro Bundler não encontrado. Execute "npm start" primeiro.';
+                setTimeout(() => {
+                    statusText.textContent = 'Execute: npm start ou npx expo start';
+                }, 2000);
+            }
+        }
+        
+        function openWeb() {
+            const appFrame = document.getElementById('app-frame');
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            appFrame.src = 'http://localhost:8082';
+            loadingScreen.style.display = 'none';
+            appFrame.style.display = 'block';
+            document.getElementById('status-text').textContent = 'Modo web ativo';
+        }
+        
+        async function checkAPI() {
+            const statusText = document.getElementById('status-text');
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                statusText.textContent = '✅ API funcionando: ' + data.message;
+            } catch (error) {
+                statusText.textContent = '❌ API não encontrada. Execute "python mobile_api.py"';
+            }
+        }
+        
+        function reload() {
+            if (appStarted) {
+                document.getElementById('app-frame').src = document.getElementById('app-frame').src;
+                document.getElementById('status-text').textContent = 'App recarregado';
+            } else {
+                location.reload();
+            }
+        }
+        
+        // Auto-detectar quando Metro estiver rodando
+        setInterval(async () => {
+            if (!appStarted) {
+                try {
+                    const response = await fetch('http://localhost:8081');
+                    if (response.ok) {
+                        document.getElementById('status-text').textContent = '✅ Metro detectado! Clique em "Iniciar App"';
+                    }
+                } catch (e) {
+                    try {
+                        const response = await fetch('http://localhost:8082');
+                        if (response.ok) {
+                            document.getElementById('status-text').textContent = '✅ Expo detectado! Clique em "Iniciar App"';
+                        }
+                    } catch (e2) {}
+                }
+            }
+        }, 3000);
+        
+        // Verificar API na inicialização
+        checkAPI();
+    </script>
+</body>
+</html>

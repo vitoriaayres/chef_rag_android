@@ -6,6 +6,50 @@ from .ai_providers import ai_provider, get_ai_response, analyze_image_with_ai
 import time 
 import requests
 
+def generate_online_recipe_suggestion(ingredient: str, quick_mode: bool = True) -> str:
+    """
+    Gera sugestão online econômica usando poucos tokens.
+    
+    Args:
+        ingredient: Ingrediente para buscar
+        quick_mode: Se True, usa prompt ultra-compacto
+    """
+    try:
+        if quick_mode:
+            # Prompt ultra-compacto para economizar tokens
+            prompt = f"Receita rápida com {ingredient}. Apenas: nome, ingredientes básicos, preparo em 3 passos. Máximo 100 palavras."
+        else:
+            prompt = f"Sugira 1 receita simples com {ingredient}. Seja conciso: nome, ingredientes essenciais, 5 passos máximo."
+        
+        print("🌐 Gerando receita online (modo econômico)...")
+        response = get_ai_response(prompt)
+        
+        return f"""
+🌐 **RECEITA ONLINE RÁPIDA:**
+
+{response}
+
+💡 **Para mais opções:** TudoGostoso.com.br, YouTube
+        """
+        
+    except Exception as e:
+        print(f"Erro na busca online: {e}")
+        return f"🌐 Busque '{ingredient}' em TudoGostoso.com.br ou YouTube!"
+
+def ask_user_online_search(ingredient: str, source_mode: str = "terminal") -> bool:
+    """
+    Pergunta ao usuário se quer busca online (apenas em modo terminal).
+    """
+    if source_mode != "terminal":
+        return False
+        
+    try:
+        print(f"\n🌐 Buscar receita online com {ingredient}? (custo: poucos tokens)")
+        response = input("Digite 's' para buscar ou ENTER para pular: ").strip().lower()
+        return response == 's'
+    except:
+        return False
+
 def get_text_embedding(text: str) -> list[float]:
     """Gera o embedding usando OpenAI."""
     try:
@@ -205,18 +249,31 @@ def find_relevant_recipes_multiple_ingredients(ingredients_list: list, n_results
         print(f"Erro ao buscar receitas para múltiplos ingredientes: {e}")
         return {'documents': [], 'metadatas': []}
 
-def generate_recipe_suggestion(ingredient: str, recipes_data: dict) -> str:
+def generate_recipe_suggestion(ingredient: str, recipes_data: dict, source_mode: str = "folder") -> str:
     """
     Usa o LLM configurado para gerar a resposta final, usando as
-    receitas encontradas como contexto (RAG).
+    receitas encontradas como contexto (RAG) - SEMPRE PRIORIZA O PDF.
     """
-    print("🤖 Gerando sugestão de chef...")
+    print("📚 Buscando no seu livro de receitas...")
     try:
         documents = recipes_data.get('documents', [])
         metadatas = recipes_data.get('metadatas', [])
         
         if not documents:
-            return "Desculpe, não encontrei receitas relevantes para esse ingrediente no livro."
+            no_recipes_response = f"""
+📚 **DO SEU LIVRO DE RECEITAS:**
+Desculpe, não encontrei receitas com {ingredient} no seu livro.
+
+🌐 **OPÇÃO ECONÔMICA:** 
+Quer uma receita rápida online? (usa poucos tokens)
+            """
+            
+            # Pergunta se quer busca online (só no terminal)
+            if ask_user_online_search(ingredient, source_mode):
+                online_recipe = generate_online_recipe_suggestion(ingredient, quick_mode=True)
+                return no_recipes_response + "\n" + online_recipe
+            else:
+                return no_recipes_response + f"\n💡 **DICA:** Busque '{ingredient}' em TudoGostoso.com.br!"
         
         # Cria o contexto com numeração das receitas e páginas
         context_parts = []
@@ -230,47 +287,72 @@ def generate_recipe_suggestion(ingredient: str, recipes_data: dict) -> str:
         Você é um assistente de culinária gourmet.
         O usuário quer fazer uma receita usando o ingrediente: {ingredient}
 
-        Eu encontrei as seguintes receitas no livro de culinária dele que parecem
+        Eu encontrei as seguintes receitas no LIVRO DE CULINÁRIA DELE que parecem
         ser relevantes para este ingrediente:
 
-        --- CONTEXTO DO LIVRO ---
+        --- CONTEXTO DO LIVRO (RAG) ---
         {context_text}
         --- FIM DO CONTEXTO ---
 
-        Com base **apenas** nas receitas do contexto acima, crie uma resposta organizada seguindo este formato:
+        Com base **apenas** nas receitas do livro acima, crie uma resposta organizada seguindo este formato:
         
-        📋 **RECEITAS ENCONTRADAS COM {ingredient.upper()}:**
+        📚 **DO SEU LIVRO DE RECEITAS:**
         
-        1. **Nome da Receita 1** (Página X) - Breve descrição dos pratos principais
-        2. **Nome da Receita 2** (Página Y) - Breve descrição dos pratos principais  
-        3. **Nome da Receita 3** (Página Z) - Breve descrição dos pratos principais
-        (e assim por diante...)
+        🍽️ **RECEITAS ENCONTRADAS COM {ingredient.upper()}:**
+        1. **Nome da Receita 1** (Página X) - Breve descrição
+        2. **Nome da Receita 2** (Página Y) - Breve descrição  
+        3. **Nome da Receita 3** (Página Z) - Breve descrição
         
-        🍽️ **SUGESTÃO DO CHEF:**
-        [Sua recomendação de qual receita escolher e por quê]
+        👨‍🍳 **SUGESTÃO DO CHEF:**
+        [Sua recomendação de qual receita do livro escolher e por quê]
         
         IMPORTANTE: 
-        - Liste até 5 receitas numeradas
+        - Liste até 5 receitas numeradas DO LIVRO
         - Inclua sempre a página de cada receita
         - Extraia o nome principal do prato de cada receita
         - Seja conciso e organizado
+        - DEIXE CLARO que são receitas do livro do usuário
         """
         
         response_text = get_ai_response(prompt)
-        return response_text
+        
+        # Adiciona opção de busca online econômica no final
+        online_option = f"\n\n🌐 **QUER MAIS OPÇÕES?** Busque receitas online com {ingredient}!"
+        
+        # Se for modo terminal, oferece busca econômica
+        if source_mode in ["terminal", "voice_terminal"] and ask_user_online_search(ingredient, "terminal"):
+            online_recipe = generate_online_recipe_suggestion(ingredient, quick_mode=True)
+            return response_text + "\n" + online_recipe
+        else:
+            return response_text + online_option
         
     except Exception as e:
         print(f"Erro ao gerar resposta final: {e}")
-        return "Desculpe, não consegui pensar em uma sugestão no momento."
+        return f"Desculpe, não consegui acessar seu livro de receitas no momento.\n\n🌐 **SUGESTÃO:** Busque receitas com {ingredient} online!"
 
-def generate_recipe_suggestion_multiple(ingredients_list: list, recipes_data: dict) -> str:
+def generate_recipe_suggestion_multiple(ingredients_list: list, recipes_data: dict, source_mode: str = "folder") -> str:
     """
-    Gera sugestão de receitas para múltiplos ingredientes usando LLM (Gemini).
+    Gera sugestão de receitas para múltiplos ingredientes - SEMPRE PRIORIZA RAG (PDF).
     """
-    print(f"🤖 Gerando sugestão para {len(ingredients_list)} ingredientes...")
+    print(f"📚 Analisando seu livro para {len(ingredients_list)} ingredientes...")
     try:
+        ingredients_str = ', '.join(ingredients_list)
+        
         if not recipes_data['documents']:
-            return f"Não foram encontradas receitas para os ingredientes: {', '.join(ingredients_list)}"
+            no_recipes_response = f"""
+📚 **DO SEU LIVRO DE RECEITAS:**
+Não encontrei receitas que usem {ingredients_str} no seu livro.
+
+🌐 **OPÇÃO ECONÔMICA:** 
+Quer uma receita rápida online? (usa poucos tokens)
+            """
+            
+            # Pergunta se quer busca online (só no terminal)
+            if ask_user_online_search(ingredients_str, source_mode):
+                online_recipe = generate_online_recipe_suggestion(ingredients_str, quick_mode=True)
+                return no_recipes_response + "\n" + online_recipe
+            else:
+                return no_recipes_response + f"\n💡 **DICA:** Busque '{ingredients_str}' em TudoGostoso.com.br!"
         
         # Monta o contexto com as receitas encontradas
         context_text = ""
@@ -278,20 +360,18 @@ def generate_recipe_suggestion_multiple(ingredients_list: list, recipes_data: di
             page = meta.get('page', 'N/A')
             context_text += f"=== RECEITA {i+1} (Página {page}) ===\n{doc}\n\n"
         
-        ingredients_str = ', '.join(ingredients_list)
-        
         prompt = f"""
         Você é um chef experiente. O usuário tem os seguintes ingredientes: **{ingredients_str}**.
         
-        Analise as receitas do contexto abaixo e encontre as que podem ser feitas com esses ingredientes (total ou parcialmente).
+        Analise as receitas do LIVRO DE CULINÁRIA DELE abaixo e encontre as que podem ser feitas com esses ingredientes.
         
-        --- CONTEXTO DO LIVRO ---
+        --- CONTEXTO DO LIVRO (RAG) ---
         {context_text}
         --- FIM DO CONTEXTO ---
 
-        Com base **apenas** nas receitas do contexto acima, crie uma resposta organizada seguindo este formato:
+        Com base **apenas** nas receitas do livro acima, crie uma resposta organizada seguindo este formato:
         
-        📋 **RECEITAS ENCONTRADAS COM {ingredients_str.upper()}:**
+        📚 **DO SEU LIVRO DE RECEITAS:**
         
         🟢 **RECEITAS COMPLETAS** (usam vários dos seus ingredientes):
         1. **Nome da Receita 1** (Página X) - Ingredientes que você tem: [listar]
@@ -299,25 +379,36 @@ def generate_recipe_suggestion_multiple(ingredients_list: list, recipes_data: di
         🟡 **RECEITAS PARCIAIS** (usam alguns dos seus ingredientes):
         2. **Nome da Receita 2** (Página Y) - Ingrediente principal que você tem: [ingrediente]
         
-        🍽️ **SUGESTÃO DO CHEF:**
-        [Recomendação prioritária baseada nos ingredientes disponíveis, explicando qual receita aproveita melhor seus ingredientes]
+        👨‍🍳 **SUGESTÃO DO CHEF:**
+        [Recomendação prioritária baseada nos ingredientes disponíveis DO LIVRO]
         
         💡 **DICA EXTRA:**
-        [Sugestão de como combinar os ingredientes ou o que poderia comprar para complementar]
+        [Sugestão de como combinar os ingredientes ou o que poderia comprar]
         
         IMPORTANTE: 
         - Priorize receitas que usam múltiplos ingredientes que o usuário possui
-        - Seja criativo ao identificar combinações possíveis
+        - Seja criativo ao identificar combinações possíveis DO LIVRO
         - Inclua sempre a página de cada receita
         - Separe receitas completas de parciais
+        - DEIXE CLARO que são receitas do livro do usuário
         """
         
         response_text = get_ai_response(prompt)
-        return response_text
+        
+        # Adiciona opção de busca online econômica no final
+        online_option = f"\n\n🌐 **QUER MAIS OPÇÕES?** Busque receitas online com {ingredients_str}!"
+        
+        # Se for modo terminal, oferece busca econômica
+        if source_mode in {"terminal", "voice_terminal"} and ask_user_online_search(ingredients_str, "terminal"):
+            online_recipe = generate_online_recipe_suggestion(ingredients_str, quick_mode=True)
+            return response_text + "\n" + online_recipe
+        else:
+            return response_text + online_option
         
     except Exception as e:
         print(f"Erro ao gerar resposta para múltiplos ingredientes: {e}")
-        return f"Desculpe, não consegui processar a sugestão para {', '.join(ingredients_list)}."
+        ingredients_str = ', '.join(ingredients_list)
+        return f"Desculpe, não consegui acessar seu livro no momento.\n\n🌐 **SUGESTÃO:** Busque receitas com {ingredients_str} online!"
 
 def extract_recipes_for_rating(recipes_response: str) -> list:
     """
@@ -459,15 +550,15 @@ def find_recipes_by_ingredient(ingredients: str, image_path=None, source_mode: s
             print(f"🔍 Processando {len(ingredients_list)} ingredientes: {', '.join(ingredients_list)}")
             # Busca receitas para múltiplos ingredientes
             recipes_data = find_relevant_recipes_multiple_ingredients(ingredients_list)
-            response = generate_recipe_suggestion_multiple(ingredients_list, recipes_data)
+            response = generate_recipe_suggestion_multiple(ingredients_list, recipes_data, source_mode)
         else:
             # Apenas um ingrediente
             recipes_data = find_relevant_recipes(ingredients_list[0])
-            response = generate_recipe_suggestion(ingredients_list[0], recipes_data)
+            response = generate_recipe_suggestion(ingredients_list[0], recipes_data, source_mode)
     else:
         # Ingrediente único
         recipes_data = find_relevant_recipes(ingredients)
-        response = generate_recipe_suggestion(ingredients, recipes_data)
+        response = generate_recipe_suggestion(ingredients, recipes_data, source_mode)
     
     processing_time = time.time() - start_time
     

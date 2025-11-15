@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Chef RAG - Câmera Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .camera-section {
+            padding: 20px;
+        }
+
+        .camera-container {
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            width: 80%;
+            height: 60%;
+            pointer-events: none;
+        }
+
+        .camera-overlay::before {
+            content: 'Posicione o ingrediente aqui';
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 2px solid #dee2e6;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .result-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result-success {
+            border-left: 4px solid #28a745;
+        }
+
+        .result-error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ingredient-result {
+            font-size: 18px;
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .recipes-count {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .recipes-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .status-bar {
+            background: #e9ecef;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        .camera-status {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                padding: 18px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Chef RAG</h1>
+            <p>Câmera Inteligente para Ingredientes</p>
+        </div>
+
+        <div class="camera-section">
+            <div class="camera-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas"></canvas>
+                <div class="camera-overlay"></div>
+            </div>
+
+            <div class="camera-status" id="cameraStatus">
+                📷 Carregando câmera...
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="captureBtn" disabled>
+                    📸 Capturar Ingrediente
+                </button>
+                <button class="btn btn-secondary" id="permissionBtn" style="display: none;">
+                    🔒 Permitir Câmera
+                </button>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-secondary" id="historyBtn">
+                    📊 Histórico
+                </button>
+                <button class="btn btn-secondary" id="helpBtn">
+                    ❓ Ajuda
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>🧠 Analisando ingrediente...</p>
+            </div>
+
+            <div class="result-section" id="resultSection">
+                <div class="ingredient-result" id="ingredientResult"></div>
+                <div class="recipes-count" id="recipesCount"></div>
+                <div class="recipes-text" id="recipesText"></div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <span id="connectionStatus">🟢 Conectado ao Chef RAG</span>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const permissionBtn = document.getElementById('permissionBtn');
+        const historyBtn = document.getElementById('historyBtn');
+        const helpBtn = document.getElementById('helpBtn');
+        const loading = document.getElementById('loading');
+        const resultSection = document.getElementById('resultSection');
+        const cameraStatus = document.getElementById('cameraStatus');
+        const ctx = canvas.getContext('2d');
+
+        let stream = null;
+
+        // Inicializar câmera
+        async function initCamera() {
+            try {
+                cameraStatus.textContent = '📷 Solicitando permissões da câmera...';
+                
+                // Verificar se getUserMedia está disponível
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error('Câmera não suportada neste dispositivo/navegador');
+                }
+
+                // Solicitar permissões explicitamente
+                const constraints = {
+                    video: {
+                        facingMode: 'environment', // Câmera traseira preferida
+                        width: { ideal: 1920, max: 1920 },
+                        height: { ideal: 1080, max: 1080 }
+                    },
+                    audio: false // Não precisamos de áudio
+                };
+
+                console.log('Solicitando acesso à câmera...', constraints);
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                
+                console.log('Câmera autorizada!', stream.getTracks());
+                video.srcObject = stream;
+
+                // Aguardar carregamento dos metadados
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        console.log('Metadados carregados:', video.videoWidth, 'x', video.videoHeight);
+                        resolve();
+                    };
+                });
+
+                // Ajustar canvas para o tamanho do vídeo
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                cameraStatus.textContent = '✅ Câmera ativa! Posicione o ingrediente e capture.';
+                captureBtn.disabled = false;
+                
+                console.log('Câmera inicializada com sucesso!');
+
+            } catch (error) {
+                console.error('Erro ao acessar câmera:', error);
+                
+                let errorMessage = '❌ Erro ao acessar câmera: ';
+                
+                if (error.name === 'NotAllowedError') {
+                    errorMessage += 'Permissão negada. Permita o acesso à câmera nas configurações.';
+                    showPermissionHelp();
+                } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+                    errorMessage += 'Nenhuma câmera encontrada.';
+                    // Tentar câmera frontal
+                    await tryFrontCamera();
+                    return;
+                } else if (error.name === 'NotSupportedError') {
+                    errorMessage += 'Câmera não suportada neste navegador.';
+                    showBrowserHelp();
+                } else if (error.name === 'OverconstrainedError') {
+                    errorMessage += 'Configurações de câmera não suportadas.';
+                    // Tentar configurações mais básicas
+                    await tryBasicCamera();
+                    return;
+                } else {
+                    errorMessage += error.message || 'Erro desconhecido';
+                }
+                
+                cameraStatus.textContent = errorMessage;
+            }
+        }
+
+        // Tentar câmera frontal se traseira não funcionar
+        async function tryFrontCamera() {
+            try {
+                cameraStatus.textContent = '🔄 Tentando câmera frontal...';
+                
+                const frontConstraints = {
+                    video: {
+                        facingMode: 'user', // Câmera frontal
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                };
+                
+                stream = await navigator.mediaDevices.getUserMedia(frontConstraints);
+                video.srcObject = stream;
+                
+                video.onloadedmetadata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    cameraStatus.textContent = '⚠️ Usando câmera frontal. Recomendado: câmera traseira.';
+                    captureBtn.disabled = false;
+                };
+                
+            } catch (frontError) {
+                console.error('Câmera frontal também falhou:', frontError);
+                cameraStatus.textContent = '❌ Nenhuma câmera disponível.';
+                showPermissionHelp();
+            }
+        }
+
+        // Tentar configurações básicas de câmera
+        async function tryBasicCamera() {
+            try {
+                cameraStatus.textContent = '🔄 Tentando configurações básicas...';
+                
+                const basicConstraints = {
+                    video: true // Configuração mais básica possível
+                };
+                
+                stream = await navigator.mediaDevices.getUserMedia(basicConstraints);
+                video.srcObject = stream;
+                
+                video.onloadedmetadata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    cameraStatus.textContent = '✅ Câmera básica ativa.';
+                    captureBtn.disabled = false;
+                };
+                
+            } catch (basicError) {
+                console.error('Configurações básicas falharam:', basicError);
+                cameraStatus.textContent = '❌ Impossível acessar câmera.';
+                showPermissionHelp();
+            }
+        }
+
+        // Mostrar ajuda sobre permissões
+        function showPermissionHelp() {
+            const helpDiv = document.createElement('div');
+            helpDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 90%;
+                text-align: center;
+            `;
+            
+            helpDiv.innerHTML = `
+                <h3>🔒 Permissões de Câmera</h3>
+                <p><strong>Como permitir acesso à câmera:</strong></p>
+                <br>
+                <p>📱 <strong>Chrome/Edge:</strong><br>
+                Toque no ícone de cadeado ao lado da URL e permita câmera</p>
+                <br>
+                <p>🦊 <strong>Firefox:</strong><br>
+                Toque em "Permitir" quando solicitado</p>
+                <br>
+                <p>🍎 <strong>Safari:</strong><br>
+                Vá em Configurações > Safari > Câmera e permita</p>
+                <br>
+                <button onclick="this.parentElement.remove(); location.reload();" 
+                        style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px;">
+                    🔄 Tentar Novamente
+                </button>
+            `;
+            
+            document.body.appendChild(helpDiv);
+            
+            // Mostrar botão de permissão
+            permissionBtn.style.display = 'flex';
+            permissionBtn.onclick = () => {
+                helpDiv.remove();
+                initCamera();
+            };
+        }
+
+        // Mostrar ajuda de navegador
+        function showBrowserHelp() {
+            const helpDiv = document.createElement('div');
+            helpDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 90%;
+                text-align: center;
+            `;
+            
+            helpDiv.innerHTML = `
+                <h3>🌐 Navegador Não Suportado</h3>
+                <p><strong>Navegadores recomendados:</strong></p>
+                <br>
+                <p>📱 <strong>Android:</strong> Chrome, Firefox</p>
+                <p>🍎 <strong>iPhone:</strong> Safari, Chrome</p>
+                <br>
+                <p>⚠️ <strong>Não funciona em:</strong><br>
+                Navegadores antigos, modo privado de alguns navegadores</p>
+                <br>
+                <button onclick="this.parentElement.remove();" 
+                        style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px;">
+                    ✅ Entendi
+                </button>
+            `;
+            
+            document.body.appendChild(helpDiv);
+        }
+
+        // Mostrar ajuda geral
+        function showGeneralHelp() {
+            const helpDiv = document.createElement('div');
+            helpDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 90%;
+                text-align: left;
+            `;
+            
+            helpDiv.innerHTML = `
+                <h3>🍽️ Chef RAG - Como Usar</h3>
+                
+                <p><strong>📱 1. Permita acesso à câmera</strong><br>
+                Quando solicitado, clique em "Permitir"</p>
+                
+                <p><strong>📸 2. Posicione o ingrediente</strong><br>
+                Coloque o ingrediente dentro da área marcada</p>
+                
+                <p><strong>🔍 3. Capture a imagem</strong><br>
+                Toque em "Capturar Ingrediente"</p>
+                
+                <p><strong>🤖 4. Aguarde a análise</strong><br>
+                A IA identificará o ingrediente</p>
+                
+                <p><strong>📚 5. Veja as receitas</strong><br>
+                Receitas serão exibidas automaticamente</p>
+                
+                <br>
+                <p><strong>💡 Dicas:</strong></p>
+                <ul>
+                    <li>Use boa iluminação</li>
+                    <li>Ingrediente bem visível</li>
+                    <li>Evite sombras</li>
+                </ul>
+                
+                <button onclick="this.parentElement.remove();" 
+                        style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; margin-top: 15px;">
+                    ✅ Entendi
+                </button>
+            `;
+            
+            document.body.appendChild(helpDiv);
+        }
+
+        // Capturar foto
+        function capturePhoto() {
+            if (!video.videoWidth) return;
+
+            // Desenhar frame atual no canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Converter para base64
+            const imageData = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Enviar para servidor
+            sendToServer(imageData);
+        }
+
+        // Enviar para servidor
+        async function sendToServer(imageData) {
+            try {
+                loading.style.display = 'block';
+                resultSection.style.display = 'none';
+                captureBtn.disabled = true;
+
+                const response = await fetch('/capture', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: imageData })
+                });
+
+                const result = await response.json();
+                
+                loading.style.display = 'none';
+                captureBtn.disabled = false;
+
+                if (result.success) {
+                    showResult(result.result);
+                } else {
+                    showError(result.error);
+                }
+
+            } catch (error) {
+                loading.style.display = 'none';
+                captureBtn.disabled = false;
+                showError('Erro de conexão: ' + error.message);
+            }
+        }
+
+        // Mostrar resultado
+        function showResult(result) {
+            resultSection.className = 'result-section result-success';
+            resultSection.style.display = 'block';
+
+            if (result.ingredient) {
+                document.getElementById('ingredientResult').textContent = 
+                    `🥕 Ingrediente: ${result.ingredient}`;
+                document.getElementById('recipesCount').textContent = 
+                    `📚 ${result.count} receitas encontradas`;
+                document.getElementById('recipesText').textContent = result.recipes || '';
+            } else {
+                showError(result.error || 'Ingrediente não identificado');
+            }
+        }
+
+        // Mostrar erro
+        function showError(message) {
+            resultSection.className = 'result-section result-error';
+            resultSection.style.display = 'block';
+            
+            document.getElementById('ingredientResult').textContent = '❌ ' + message;
+            document.getElementById('recipesCount').textContent = '';
+            document.getElementById('recipesText').textContent = 
+                'Tente uma foto mais clara ou com melhor iluminação.';
+        }
+
+        // Mostrar histórico
+        async function showHistory() {
+            try {
+                const response = await fetch('/history');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const files = result.files;
+                    let historyText = '📊 Últimas análises:\n\n';
+                    
+                    if (files.length === 0) {
+                        historyText += 'Nenhuma análise anterior encontrada.';
+                    } else {
+                        files.forEach((file, index) => {
+                            historyText += `${index + 1}. ${file.timestamp} - ${file.size}\n`;
+                        });
+                    }
+                    
+                    alert(historyText);
+                } else {
+                    alert('Erro ao carregar histórico: ' + result.error);
+                }
+            } catch (error) {
+                alert('Erro de conexão: ' + error.message);
+            }
+        }
+
+        // Event listeners
+        captureBtn.addEventListener('click', capturePhoto);
+        historyBtn.addEventListener('click', showHistory);
+        helpBtn.addEventListener('click', showGeneralHelp);
+
+        // Inicializar quando a página carregar
+        window.addEventListener('load', initCamera);
+
+        // Limpeza ao sair
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+
+        // Prevenir zoom no iOS
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        // Adicionar feedback visual quando tocar nos botões
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

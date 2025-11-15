@@ -12,62 +12,450 @@ import os
 from core_logic import config
 from core_logic.cleanup_manager import setup_image_cleanup
 
-def show_menu():
-    """Exibe o menu principal do sistema"""
-    print("\n" + "="*60)
-    print("🧑‍🍳 CHEF RAG - Sistema de Receitas Inteligente")
-    print("="*60)
-    print("Escolha uma opção:")
-    print()
-    print("📸 ANÁLISE DE INGREDIENTES:")
-    print("1. 📷 Webcam - Capturar ingredientes em tempo real")
-    print("2. 📁 Pasta - Monitorar pasta para novas imagens") 
-    print("3. 🎤 Voz - Reconhecer ingredientes por comando de voz")
-    print()
-    print("🔍 BUSCA ESPECIALIZADA:")
-    print("4. 🥗 Filtros Alimentares - Buscar receitas por restrições")
-    print("5. ⏰ Timers - Gerenciar cronômetros de receitas")
-    print()
-    print("📊 DADOS E HISTÓRICO:")
-    print("6. 📄 Histórico - Ver análises anteriores")
-    print("7. 👤 Perfil - Configurar preferências do usuário")
-    print()
-    print("8. ❌ Sair")
-    print()
-    print("="*60)
+def limpar_tela():
+    """Limpa a tela do terminal"""
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-def run_history_mode():
+def mostrar_menu():
+    """Exibe o menu principal do sistema"""
+    limpar_tela()
+    print("\n" + "="*70)
+    print("🧑‍🍳  CHEF RAG - Seu Assistente Culinário Inteligente")
+    print("="*70)
+    print("🤖 Inteligência Artificial  |  📚 Base de Receitas  |  🎯 Análise Avançada")
+    print("="*70)
+    
+    print("\n📸  COMO VOCÊ QUER ENCONTRAR RECEITAS HOJE?")
+    print()
+    print("   1. 📷 Usar Câmera do Computador")
+    print("   2. 📱 Usar Câmera do Celular (QR Code)")
+    print("   3. 🖼️  Enviar Foto dos Ingredientes")
+    print("   4. ✍️  Digitar os Ingredientes")
+    print("   5. 🎤 Falar os Ingredientes")
+    print()
+    print("🔧  OUTRAS OPÇÕES:")
+    print()
+    print("   6. 🥗 Filtrar por Dieta Especial")
+    print("   7. ⏰ Gerenciar Cronômetros")
+    print("   8. 📊 Ver Histórico de Receitas")
+    print("   9. 👤 Meu Perfil")
+    print()
+    print("  10. ❌ Sair do Sistema")
+    print()
+    print("="*70)
+
+def executar_historico():
     """Executa o visualizador de histórico"""
     try:
         from history_viewer import main as history_main
-        print("\n🎯 Abrindo visualizador de histórico...")
+        print("\n📄 Abrindo seu histórico de receitas...")
         history_main()
-    except ImportError as e:
-        print(f"❌ Erro ao importar visualizador: {e}")
+    except ImportError:
+        print("❌ Sistema de histórico não encontrado")
     except Exception as e:
-        print(f"❌ Erro no visualizador: {e}")
+        print(f"❌ Erro ao abrir histórico: {e}")
 
-def run_webcam_mode():
-    """Executa o modo webcam"""
+def usar_camera_pc():
+    """Executa a câmera do computador"""
     try:
         from webcam import run_webcam_capture
-        print("\n🎯 Iniciando modo Webcam...")
+        print("\n📷 Preparando câmera do computador...")
+        print("💡 Posicione os ingredientes na frente da câmera")
         run_webcam_capture()
-    except ImportError as e:
-        print(f"❌ Erro ao importar módulo webcam: {e}")
+    except ImportError:
+        print("❌ Sistema de câmera não encontrado")
+        print("💡 Verifique se a webcam está conectada")
     except Exception as e:
-        print(f"❌ Erro no modo webcam: {e}")
+        print(f"❌ Erro na câmera: {e}")
+        input("\nPressione ENTER para continuar...")
 
-def run_folder_mode():
-    """Executa o modo monitoramento de pasta"""
+def usar_camera_celular():
+    """Executa o servidor para câmera do celular"""
     try:
-        from monitor import start_monitoring
-        print("\n🎁 Iniciando monitoramento de pasta...")
-        start_monitoring()
-    except ImportError as e:
-        print(f"❌ Erro ao importar módulo monitor: {e}")
+        from mobile_camera import start_mobile_server
+        print("\n📱 Iniciando conexão com seu celular...")
+        print("💡 Mantenha este terminal aberto e use seu celular!")
+        print("📱 Um QR Code será gerado para conexão rápida")
+        start_mobile_server()
+    except ImportError:
+        print("❌ Sistema mobile não encontrado")
+        print("💡 Execute: pip install flask qrcode pillow")
     except Exception as e:
-        print(f"❌ Erro no modo pasta: {e}")
+        print(f"❌ Erro no servidor mobile: {e}")
+        input("\nPressione ENTER para continuar...")
+    except Exception as e:
+        print(f"❌ Erro: {e}")
+
+def enviar_foto_ingredientes():
+    """Permite enviar uma foto dos ingredientes"""
+    limpar_tela()
+    print("\n📸 ENVIAR FOTO DOS INGREDIENTES")
+    print("="*50)
+    print("📁 Você pode enviar uma foto que já tem salva no computador")
+    print()
+    
+    try:
+        from core_logic import rag_system
+        
+        # Solicitar caminho da imagem
+        print("💡 Digite o caminho completo da imagem")
+        print("   Exemplo: C:\\Users\\Seu_Usuario\\Fotos\\ingredientes.jpg")
+        print()
+        
+        caminho_imagem = input("📂 Caminho da imagem: ").strip()
+        
+        if not caminho_imagem:
+            print("❌ Nenhum caminho foi informado")
+            return
+            
+        if not os.path.exists(caminho_imagem):
+            print("❌ Arquivo não encontrado!")
+            print("🔍 Verifique se o caminho está correto")
+            return
+        
+        print(f"\n🔍 Analisando imagem: {os.path.basename(caminho_imagem)}")
+        print("⏳ Aguarde, a inteligência artificial está trabalhando...")
+        
+        # Extrair ingredientes
+        ingrediente = rag_system.extract_ingredients_from_image(caminho_imagem)
+        
+        if "Erro" in ingrediente:
+            print("❌ Não foi possível identificar os ingredientes")
+            print("💡 Tente uma imagem mais clara ou com melhor qualidade")
+            return
+            
+        print(f"✅ Ingrediente identificado: {ingrediente}")
+        
+        # Buscar receitas
+        print("\n🔍 Procurando receitas no seu livro de receitas...")
+        receitas = rag_system.find_recipes_by_ingredient(ingrediente, caminho_imagem, "upload")
+        
+        if receitas:
+            print("\n🍽️ RECEITAS ENCONTRADAS:")
+            print("="*60)
+            print(receitas)
+            print("="*60)
+        else:
+            print(f"❌ Nenhuma receita encontrada para: {ingrediente}")
+            
+    except ImportError:
+        print("❌ Sistema de análise não disponível")
+    except Exception as e:
+        print(f"❌ Erro ao processar imagem: {e}")
+    
+    input("\nPressione ENTER para voltar ao menu...")
+
+def digitar_ingredientes():
+    """Permite digitar os ingredientes manualmente"""
+    limpar_tela()
+    print("\n✍️ DIGITAR INGREDIENTES")
+    print("="*50)
+    print("📝 Digite os ingredientes que você tem disponível")
+    print()
+    
+    try:
+        from core_logic import rag_system
+        
+        print("💡 Exemplos:")
+        print("   • tomate, cebola, alho")
+        print("   • frango, batata, cenoura")
+        print("   • ovos, leite, farinha")
+        print()
+        
+        ingredientes = input("🥬 Digite seus ingredientes: ").strip()
+        
+        if not ingredientes:
+            print("❌ Nenhum ingrediente foi informado")
+            return
+            
+        print(f"\n🔍 Procurando receitas com: {ingredientes}")
+        print("⏳ Consultando base de receitas...")
+        
+        # Buscar receitas
+        receitas = rag_system.generate_recipe_suggestion_multiple(ingredientes.split(","))
+        
+        if receitas:
+            print("\n🍽️ SUGESTÕES DE RECEITAS:")
+            print("="*60)
+            print(receitas)
+            print("="*60)
+        else:
+            print("❌ Nenhuma receita encontrada com esses ingredientes")
+            print("💡 Tente ingredientes mais comuns ou uma combinação diferente")
+            
+    except ImportError:
+        print("❌ Sistema de receitas não disponível")
+    except Exception as e:
+        print(f"❌ Erro ao buscar receitas: {e}")
+    
+    input("\nPressione ENTER para voltar ao menu...")
+
+def falar_ingredientes():
+    """Permite falar os ingredientes usando reconhecimento de voz"""
+    limpar_tela()
+    print("\n🎤 RECONHECIMENTO DE VOZ")
+    print("="*50)
+    print("🗣️ Fale os ingredientes que você tem disponível")
+    print()
+    
+    try:
+        from core_logic.voice_recognition import voice_recognition
+        from core_logic import rag_system
+        
+        # Testar microfone
+        print("🎧 Testando seu microfone...")
+        teste = voice_recognition.test_microphone()
+        
+        if not teste['available']:
+            print(f"❌ {teste['message']}")
+            print("🔧 Verifique se seu microfone está conectado e funcionando")
+            return
+            
+        print("✅ Microfone funcionando perfeitamente!")
+        print()
+        print("💡 Exemplos do que você pode falar:")
+        print("   • 'Tenho tomate, cebola e alho'")
+        print("   • 'Quero fazer algo com frango e batata'")
+        print("   • 'Ingredientes: ovos, leite e farinha'")
+        print()
+        
+        input("🎤 Pressione ENTER e comece a falar...")
+        
+        print("🔴 GRAVANDO... (fale agora!)")
+        ingredientes = voice_recognition.recognize_ingredients(timeout=10, phrase_time_limit=15)
+        
+        if not ingredientes or "erro" in ingredientes.lower():
+            print("❌ Não foi possível entender o áudio")
+            print("💡 Tente falar mais claramente ou verificar o microfone")
+            return
+            
+        print(f"✅ Entendi: {ingredientes}")
+        
+        print("\n🔍 Procurando receitas...")
+        receitas = rag_system.generate_recipe_suggestion(ingredientes)
+        
+        if receitas:
+            print("\n🍽️ RECEITAS SUGERIDAS:")
+            print("="*60)
+            print(receitas)
+            print("="*60)
+        else:
+            print("❌ Nenhuma receita encontrada")
+            
+    except ImportError:
+        print("❌ Sistema de voz não disponível")
+        print("🔧 Execute: pip install SpeechRecognition pyaudio")
+    except Exception as e:
+        print(f"❌ Erro no reconhecimento de voz: {e}")
+    
+    input("\nPressione ENTER para voltar ao menu...")
+
+def filtrar_por_dieta():
+    """Sistema de filtros por restrições alimentares"""
+    limpar_tela()
+    print("\n🥗 FILTROS POR DIETA ESPECIAL")
+    print("="*50)
+    print("🎯 Encontre receitas adequadas às suas necessidades")
+    print()
+    
+    try:
+        from core_logic import rag_system
+        
+        print("🍽️ Escolha seu tipo de dieta:")
+        print("   1. 🌱 Vegetariano")
+        print("   2. 🥬 Vegano")
+        print("   3. 🚫 Sem Glúten")
+        print("   4. 🥩 Low Carb")
+        print("   5. 🍯 Para Diabéticos")
+        print("   6. ⬅️ Voltar ao Menu")
+        print()
+        
+        opcao = input("🎯 Sua escolha: ").strip()
+        
+        filtros = {
+            "1": ("vegetariano", "🌱 Receitas Vegetarianas"),
+            "2": ("vegano", "🥬 Receitas Veganas"),
+            "3": ("sem glúten", "🚫 Receitas Sem Glúten"),
+            "4": ("low carb", "🥩 Receitas Low Carb"),
+            "5": ("diabético", "🍯 Receitas para Diabéticos")
+        }
+        
+        if opcao == "6":
+            return
+            
+        if opcao in filtros:
+            filtro, titulo = filtros[opcao]
+            print(f"\n{titulo}")
+            print("="*60)
+            print("🔍 Procurando receitas especiais...")
+            
+            receitas = rag_system.find_recipes_by_dietary_filter(filtro)
+            
+            if receitas:
+                print(receitas)
+                print("="*60)
+            else:
+                print("❌ Nenhuma receita encontrada para esse filtro")
+        else:
+            print("❌ Opção inválida!")
+            
+    except ImportError:
+        print("❌ Sistema de filtros não disponível")
+    except Exception as e:
+        print(f"❌ Erro ao aplicar filtro: {e}")
+    
+    input("\nPressione ENTER para voltar ao menu...")
+
+def gerenciar_cronometros():
+    """Sistema de gerenciamento de cronômetros"""
+    limpar_tela()
+    print("\n⏰ GERENCIAR CRONÔMETROS")
+    print("="*50)
+    print("🕐 Controle o tempo de preparo das suas receitas")
+    print()
+    
+    try:
+        from core_logic.timer_manager import timer_manager
+        
+        while True:
+            print("\n⏰ O que você quer fazer?")
+            print("   1. ➕ Criar Novo Cronômetro")
+            print("   2. 📋 Ver Cronômetros Ativos")
+            print("   3. ⏹️ Parar Cronômetro")
+            print("   4. ⬅️ Voltar ao Menu")
+            print()
+            
+            opcao = input("🎯 Sua escolha: ").strip()
+            
+            if opcao == "1":
+                nome = input("\n📝 Nome do cronômetro (ex: 'Ferver ovos'): ").strip()
+                if nome:
+                    try:
+                        minutos = int(input("⏲️ Quantos minutos? ").strip())
+                        if minutos > 0:
+                            timer_manager.create_timer(nome, minutos * 60)
+                            print(f"✅ Cronômetro '{nome}' criado para {minutos} minutos!")
+                        else:
+                            print("❌ Tempo deve ser maior que zero")
+                    except ValueError:
+                        print("❌ Digite um número válido de minutos")
+                        
+            elif opcao == "2":
+                timers = timer_manager.get_active_timers()
+                if timers:
+                    print("\n⏰ CRONÔMETROS ATIVOS:")
+                    print("-" * 40)
+                    for timer_id, info in timers.items():
+                        tempo_restante = info['remaining_time']
+                        mins, secs = divmod(int(tempo_restante), 60)
+                        print(f"🕐 {info['name']}: {mins:02d}:{secs:02d}")
+                    print("-" * 40)
+                else:
+                    print("📭 Nenhum cronômetro ativo no momento")
+                    
+            elif opcao == "3":
+                timers = timer_manager.get_active_timers()
+                if timers:
+                    print("\n⏹️ PARAR CRONÔMETRO:")
+                    for i, (timer_id, info) in enumerate(timers.items(), 1):
+                        print(f"   {i}. {info['name']}")
+                    
+                    try:
+                        escolha = int(input("Número do cronômetro para parar: "))
+                        timer_ids = list(timers.keys())
+                        if 1 <= escolha <= len(timer_ids):
+                            timer_manager.stop_timer(timer_ids[escolha - 1])
+                            print("✅ Cronômetro parado!")
+                        else:
+                            print("❌ Número inválido")
+                    except ValueError:
+                        print("❌ Digite um número válido")
+                else:
+                    print("📭 Nenhum cronômetro ativo para parar")
+                    
+            elif opcao == "4":
+                break
+            else:
+                print("❌ Opção inválida!")
+                
+    except ImportError:
+        print("❌ Sistema de cronômetros não disponível")
+    except Exception as e:
+        print(f"❌ Erro no gerenciamento de cronômetros: {e}")
+    
+    input("\nPressione ENTER para continuar...")
+
+def gerenciar_perfil():
+    """Sistema de gerenciamento do perfil do usuário"""
+    limpar_tela()
+    print("\n👤 MEU PERFIL")
+    print("="*50)
+    print("⚙️ Gerencie suas preferências culinárias")
+    print()
+    
+    try:
+        from core_logic.database import db_manager
+        
+        while True:
+            print("\n👤 O que você quer fazer?")
+            print("   1. 📝 Atualizar Nome")
+            print("   2. 🍽️ Definir Nível Culinário")
+            print("   3. 🚫 Configurar Restrições Alimentares")
+            print("   4. 📊 Ver Meu Perfil Atual")
+            print("   5. ⬅️ Voltar ao Menu")
+            print()
+            
+            opcao = input("🎯 Sua escolha: ").strip()
+            
+            if opcao == "1":
+                nome = input("\n👤 Seu nome: ").strip()
+                if nome:
+                    db_manager.update_user_profile(name=nome)
+                    print(f"✅ Nome atualizado para: {nome}")
+                    
+            elif opcao == "2":
+                print("\n🎯 Qual seu nível na cozinha?")
+                print("   1. 🔰 Iniciante")
+                print("   2. 🥄 Intermediário")
+                print("   3. 👨‍🍳 Avançado")
+                
+                nivel_opcao = input("Nível: ").strip()
+                niveis = {"1": "iniciante", "2": "intermediario", "3": "avancado"}
+                
+                if nivel_opcao in niveis:
+                    db_manager.update_user_profile(cooking_level=niveis[nivel_opcao])
+                    print(f"✅ Nível definido como: {niveis[nivel_opcao].title()}")
+                    
+            elif opcao == "3":
+                print("\n🚫 Restrições alimentares (separadas por vírgula):")
+                print("💡 Ex: vegetariano, sem glúten, sem lactose")
+                restricoes = input("Suas restrições: ").strip()
+                if restricoes:
+                    lista_restricoes = [r.strip() for r in restricoes.split(",")]
+                    db_manager.update_user_profile(dietary_restrictions=lista_restricoes)
+                    print("✅ Restrições atualizadas!")
+                    
+            elif opcao == "4":
+                perfil = db_manager.get_user_profile()
+                print("\n📋 SEU PERFIL ATUAL:")
+                print("="*40)
+                print(f"👤 Nome: {perfil.get('name', 'Não definido')}")
+                print(f"🎯 Nível: {perfil.get('cooking_level', 'Não definido')}")
+                restricoes = perfil.get('dietary_restrictions', [])
+                print(f"🚫 Restrições: {', '.join(restricoes) if restricoes else 'Nenhuma'}")
+                print("="*40)
+                
+            elif opcao == "5":
+                break
+            else:
+                print("❌ Opção inválida!")
+                
+    except ImportError:
+        print("❌ Sistema de perfil não disponível")
+    except Exception as e:
+        print(f"❌ Erro no gerenciamento de perfil: {e}")
+    
+    input("\nPressione ENTER para continuar...")
 
 def run_voice_mode():
     """Executa o modo reconhecimento de voz"""
@@ -75,50 +463,39 @@ def run_voice_mode():
         from core_logic.voice_recognition import voice_recognition
         from core_logic import rag_system
         
-        print("\n🎤 Iniciando modo Reconhecimento de Voz...")
-        print("="*50)
+        clear_screen()
+        print("\n🎤 Reconhecimento de Voz")
+        print("="*30)
         
         # Testa microfone
-        print("🔧 Verificando microfone...")
         test_result = voice_recognition.test_microphone()
         
         if not test_result['available']:
             print(f"❌ {test_result['message']}")
-            print("💡 Verifique se o microfone está conectado e as permissões estão corretas")
+            input("\nPressione ENTER para voltar...")
             return
         
-        print(f"✅ {test_result['message']}")
-        print()
+        print("✅ Microfone OK")
         
         # Loop para reconhecimento contínuo
         while True:
-            print("-" * 30)
-            print("Opções:")
-            print("1. 🎙️ Reconhecer ingredientes")
-            print("2. ⬅️ Voltar ao menu principal")
-            print()
+            print("\n" + "-" * 30)
+            print("1. 🎙️ Reconhecer")
+            print("2. ⬅️ Voltar")
             
-            sub_choice = input("➤ Digite sua escolha (1-2): ").strip()
-            print()
+            sub_choice = input("\n➤ Escolha: ").strip()
             
             if sub_choice == "1":
-                print("🎤 RECONHECIMENTO DE VOZ")
-                print("=" * 30)
-                print("💡 Dicas:")
-                print("   - Fale claramente: 'Tenho tomate, cebola e alho'")
-                print("   - Evite ruídos de fundo")
-                print("   - Fale após o sinal")
-                print()
+                print("\n💡 Fale após pressionar ENTER")
+                print("   Ex: 'Tenho tomate, cebola e alho'")
                 
-                input("Pressione ENTER para começar a gravação...")
-                print()
+                input("\nPressione ENTER e fale...")
                 
                 # Reconhece ingredientes
                 ingredients = voice_recognition.recognize_ingredients(timeout=8, phrase_time_limit=15)
                 
                 if ingredients:
-                    print(f"✅ Ingredientes reconhecidos: {ingredients}")
-                    print()
+                    print(f"\n✅ Reconhecido: {ingredients}")
                     
                     # Busca receitas
                     print("🔍 Buscando receitas...")
@@ -127,29 +504,28 @@ def run_voice_mode():
                         source_mode='voice_terminal'
                     )
                     
-                    print()
-                    print("📋 SUGESTÕES DE RECEITAS:")
-                    print("=" * 40)
+                    print("\n📋 RECEITAS:")
+                    print("=" * 25)
                     print(recipes_response)
-                    print("=" * 40)
+                    print("=" * 25)
                     
                 else:
-                    print("❌ Não foi possível reconhecer ingredientes")
-                    print("💭 Tente novamente falando mais devagar e claramente")
+                    print("❌ Não reconhecido")
                 
-                print()
-                input("Pressione ENTER para continuar...")
+                input("\nPressione ENTER para continuar...")
                 
             elif sub_choice == "2":
                 break
             else:
-                print("❌ Opção inválida! Escolha 1 ou 2.")
+                print("❌ Opção inválida!")
                 
-    except ImportError as e:
-        print(f"❌ Erro ao importar reconhecimento de voz: {e}")
-        print("💡 Instale as dependências: pip install SpeechRecognition pyaudio")
+    except ImportError:
+        print("❌ Módulo de voz não disponível")
+        print("💡 Instale: pip install SpeechRecognition pyaudio")
+        input("\nPressione ENTER para voltar...")
     except Exception as e:
-        print(f"❌ Erro no modo voz: {e}")
+        print(f"❌ Erro: {e}")
+        input("\nPressione ENTER para voltar...")
 
 def run_user_profile():
     """Executa o gerenciador de perfil do usuário"""
@@ -295,36 +671,36 @@ def run_user_profile():
     except Exception as e:
         print(f"❌ Erro no gerenciador de perfil: {e}")
 
-def check_requirements():
+def run_timer_mode():
     """Executa o gerenciador de timers"""
     try:
         from core_logic.timer_manager import timer_manager
         from core_logic import rag_system
         
+        clear_screen()
         print("\n⏰ Gerenciador de Timers")
-        print("="*40)
+        print("="*30)
         
         while True:
-            print("\nEscolha uma opção:")
-            print("1. ⏲️ Criar Timer Novo")
-            print("2. 📋 Ver Timers Ativos")
+            print("\n1. ⏲️ Criar Timer")
+            print("2. 📋 Ver Ativos")
             print("3. ⏹️ Parar Timer")
-            print("4. 📖 Extrair Timers de Receita")
-            print("5. ⚡ Timers Pré-definidos")
-            print("6. 🔙 Voltar ao Menu Principal")
+            print("4. 📖 Extrair de Receita")
+            print("5. ⚡ Pré-definidos")
+            print("6. 🔙 Voltar")
             
-            choice = input("\n➤ Escolha (1-6): ").strip()
+            choice = input("\n➤ Escolha: ").strip()
             
             if choice == "1":
                 # Criar timer personalizado
-                timer_name = input("\n📝 Nome do timer: ").strip()
-                recipe_name = input("📖 Nome da receita (opcional): ").strip()
-                step_desc = input("📋 Descrição da etapa (opcional): ").strip()
+                timer_name = input("\n📝 Nome: ").strip()
+                recipe_name = input("📖 Receita (opcional): ").strip()
+                step_desc = input("📋 Etapa (opcional): ").strip()
                 
                 try:
-                    duration = int(input("⏱️ Duração em minutos: ").strip())
+                    duration = int(input("⏱️ Minutos: ").strip())
                     if duration <= 0:
-                        print("❌ Duração deve ser maior que 0")
+                        print("❌ Duração inválida")
                         continue
                         
                     timer_id = timer_manager.create_timer(
@@ -456,20 +832,35 @@ def check_requirements():
         print(f"❌ Erro ao importar timer manager: {e}")
     except Exception as e:
         print(f"❌ Erro no gerenciador de timers: {e}")
+def verificar_dependencias():
     """Verifica se os requisitos básicos estão atendidos"""
-    if not config.GOOGLE_API_KEY:
-        print("❌ Erro: A chave da API do Google não está configurada.")
-        print("Por favor, defina GOOGLE_API_KEY no arquivo .env")
-        return False
-    
     # Verifica se a base de dados existe
     chroma_db_file = os.path.join(config.CHROMA_DB_PATH, "chroma.sqlite3")
     if not os.path.exists(chroma_db_file):
-        print("❌ Base de dados de receitas não encontrada!")
-        print("Execute primeiro: python pdf_inge.py")
-        return False
+        limpar_tela()
+        print("❌ Base de receitas não encontrada!")
+        print("💡 Para carregar receitas, execute: python pdf_inge.py")
+        print("🔄 O sistema funcionará em modo demonstração")
+        input("Pressione ENTER para continuar...")
     
-    return True
+    try:
+        # Verificações básicas de dependências
+        import cv2
+        import numpy
+        return True
+    except ImportError as e:
+        print(f"❌ Biblioteca não encontrada: {e}")
+        print("🔧 Execute: pip install -r requirements.txt")
+        return False
+
+def configurar_limpeza_automatica():
+    """Configura o sistema de limpeza automática de imagens"""
+    try:
+        from core_logic.cleanup_manager import cleanup_manager
+        cleanup_manager.start_cleanup_timer()
+        print("🧹 Sistema de limpeza automática ativado!")
+    except Exception:
+        pass  # Não é crítico se não funcionar
 
 def run_filters_mode():
     """Executa o modo de filtros alimentares"""
@@ -665,44 +1056,66 @@ def run_profile_mode():
 
 def main():
     """Função principal do sistema"""
-    if not check_requirements():
+    if not verificar_dependencias():
         sys.exit(1)
     
-    # Configurar sistema de limpeza de imagens
-    print("🧹 Configurando sistema de limpeza automática...")
-    setup_image_cleanup()
+    # Configurar sistema de limpeza automática
+    configurar_limpeza_automatica()
     
     while True:
         try:
-            show_menu()
-            choice = input("➤ Digite sua escolha (1-8): ").strip()
+            mostrar_menu()
+            escolha = input("\n🎯 Qual opção você escolhe? ").strip()
             
-            if choice == "1":
-                run_webcam_mode()
-            elif choice == "2":
-                run_folder_mode()
-            elif choice == "3":
-                run_voice_mode()
-            elif choice == "4":
-                run_filters_mode()
-            elif choice == "5":
-                run_timer_mode()
-            elif choice == "6":
-                run_history_mode()
-            elif choice == "7":
-                run_profile_mode()
-            elif choice == "8":
-                print("\n👋 Obrigado por usar o Chef RAG!")
+            if escolha == "1":
+                usar_camera_pc()
+                
+            elif escolha == "2":
+                usar_camera_celular()
+                
+            elif escolha == "3":
+                enviar_foto_ingredientes()
+                
+            elif escolha == "4":
+                digitar_ingredientes()
+                
+            elif escolha == "5":
+                falar_ingredientes()
+                
+            elif escolha == "6":
+                filtrar_por_dieta()
+                
+            elif escolha == "7":
+                gerenciar_cronometros()
+                
+            elif escolha == "8":
+                executar_historico()
+                
+            elif escolha == "9":
+                gerenciar_perfil()
+                
+            elif escolha == "10":
+                limpar_tela()
+                print("\n" + "="*50)
+                print("🍽️ Obrigado por usar o Chef RAG!")
+                print("👨‍🍳 Volte sempre que quiser novas receitas!")
+                print("="*50)
                 break
+                
             else:
-                print("❌ Opção inválida! Por favor, escolha 1-8.")
+                print("\n❌ Opção inválida! Por favor, escolha um número de 1 a 10.")
+                input("Pressione ENTER para tentar novamente...")
                 
         except KeyboardInterrupt:
-            print("\n\n👋 Sistema encerrado pelo usuário.")
+            limpar_tela()
+            print("\n👋 Sistema encerrado pelo usuário.")
+            print("🍽️ Até a próxima!")
             break
+            
         except Exception as e:
-            print(f"\n❌ Erro inesperado: {e}")
-            break
+            print(f"\n❌ Ops! Ocorreu um erro inesperado: {e}")
+            print("🔧 Tente novamente ou reinicie o sistema.")
+            input("Pressione ENTER para continuar...")
 
 if __name__ == "__main__":
     main()
