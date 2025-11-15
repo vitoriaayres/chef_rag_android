@@ -1,0 +1,32 @@
+# Dependências para Interface de Voz Avançada - Chef RAG v2
+
+# Interface Gráfica
+tkinter  # Já incluído no Python padrão
+
+# Reconhecimento de Voz
+SpeechRecognition==3.10.0
+pyaudio==0.2.11
+pocketsphinx==0.1.15  # Para reconhecimento offline
+
+# Processamento de Audio
+numpy==1.24.3
+wave  # Já incluído no Python padrão
+
+# Gráficos e Visualização
+matplotlib==3.7.1
+
+# Processamento de PDF
+PyPDF2==3.0.1
+
+# Análise de Texto
+nltk==3.8.1  # Para análise avançada de texto
+
+# Threading e Tempo
+threading  # Já incluído no Python padrão
+time       # Já incluído no Python padrão
+
+# Outras utilidades
+json       # Já incluído no Python padrão
+datetime   # Já incluído no Python padrão
+os         # Já incluído no Python padrão
+re         # Já incluído no Python padrão

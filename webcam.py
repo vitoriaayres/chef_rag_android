@@ -9,8 +9,8 @@ from core_logic import rag_system
 
 SNAPSHOT_INTERVAL = os.path.join(config.BASE_DIR, "..", "temp_snapshot.jpg")
 
-def draw_modern_interface(frame, status="ready", ingredient=None, recipe_count=0, rotation_angle=0):
-    """Desenha uma interface moderna na webcam"""
+def draw_modern_interface(frame, status="pronto", ingredient=None, recipe_count=0, rotation_angle=0):
+    """Desenha uma interface moderna e informativa na webcam"""
     height, width = frame.shape[:2]
     
     # Cores modernas

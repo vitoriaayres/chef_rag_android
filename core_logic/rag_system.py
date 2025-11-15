@@ -8,11 +8,14 @@ import requests
 
 def generate_online_recipe_suggestion(ingredient: str, quick_mode: bool = True) -> str:
     """
-    Gera sugestão online econômica usando poucos tokens.
+    Gera sugestão de receita online econômica usando poucos tokens de IA.
     
     Args:
-        ingredient: Ingrediente para buscar
-        quick_mode: Se True, usa prompt ultra-compacto
+        ingredient: Ingrediente principal para buscar receitas
+        quick_mode: Se True, usa prompt ultra-compacto para economia
+    
+    Returns:
+        str: Sugestão de receita formatada
     """
     try:
         if quick_mode:

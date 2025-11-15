@@ -14,7 +14,7 @@ class HistoryDatabase:
         self.init_database()
     
     def init_database(self):
-        """Inicializa o banco de dados criando as tabelas necessárias"""
+        """Inicializa o banco de dados criando todas as tabelas necessárias"""
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         
         with sqlite3.connect(self.db_path) as conn:
@@ -80,6 +80,23 @@ class HistoryDatabase:
                     cooking_time_actual INTEGER,
                     difficulty_perceived TEXT,
                     would_cook_again BOOLEAN DEFAULT TRUE,
+                    created_at TEXT DEFAULT (datetime('now'))
+                )
+            ''')
+            
+            # Tabela de histórico de reconhecimento de voz
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS voice_recognition_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT DEFAULT 'default_user',
+                    timestamp TEXT NOT NULL,
+                    text_recognized TEXT NOT NULL,
+                    ingredients_extracted TEXT DEFAULT '',
+                    confidence_level REAL DEFAULT 0.0,
+                    processing_time_seconds REAL DEFAULT 0.0,
+                    recognition_engine TEXT DEFAULT 'google',
+                    was_manual_input BOOLEAN DEFAULT FALSE,
+                    session_id TEXT DEFAULT '',
                     created_at TEXT DEFAULT (datetime('now'))
                 )
             ''')
@@ -576,6 +593,105 @@ class HistoryDatabase:
                 LIMIT 20
             ''', (user_id,))
             return cursor.fetchall()
+
+    def save_voice_recognition(self, text_recognized, ingredients_extracted, 
+                             confidence_level, processing_time, recognition_engine='google', 
+                             was_manual_input=False, session_id='', user_id='default_user'):
+        """Salva resultado de reconhecimento de voz no banco"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO voice_recognition_history 
+                (user_id, timestamp, text_recognized, ingredients_extracted, confidence_level,
+                 processing_time_seconds, recognition_engine, was_manual_input, session_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                user_id,
+                datetime.now().isoformat(),
+                text_recognized,
+                ingredients_extracted,
+                confidence_level,
+                processing_time,
+                recognition_engine,
+                was_manual_input,
+                session_id
+            ))
+            return cursor.lastrowid
+    
+    def get_voice_recognition_history(self, limit=50, user_id='default_user'):
+        """Retorna histórico de reconhecimento de voz"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT id, timestamp, text_recognized, ingredients_extracted,
+                       confidence_level, processing_time_seconds, recognition_engine,
+                       was_manual_input, session_id, created_at
+                FROM voice_recognition_history 
+                WHERE user_id = ?
+                ORDER BY timestamp DESC 
+                LIMIT ?
+            ''', (user_id, limit))
+            
+            return [{
+                'id': row[0],
+                'timestamp': row[1],
+                'text': row[2],
+                'ingredients': row[3],
+                'confidence': row[4],
+                'processing_time': row[5],
+                'engine': row[6],
+                'manual': bool(row[7]),
+                'session_id': row[8],
+                'created_at': row[9]
+            } for row in cursor.fetchall()]
+    
+    def get_voice_recognition_stats(self, user_id='default_user'):
+        """Retorna estatísticas do reconhecimento de voz"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            
+            # Total de reconhecimentos
+            cursor.execute('SELECT COUNT(*) FROM voice_recognition_history WHERE user_id = ?', (user_id,))
+            total_recognitions = cursor.fetchone()[0]
+            
+            # Reconhecimentos manuais vs automáticos
+            cursor.execute('SELECT COUNT(*) FROM voice_recognition_history WHERE user_id = ? AND was_manual_input = 1', (user_id,))
+            manual_count = cursor.fetchone()[0]
+            
+            # Confiança média
+            cursor.execute('SELECT AVG(confidence_level) FROM voice_recognition_history WHERE user_id = ? AND was_manual_input = 0', (user_id,))
+            avg_confidence = cursor.fetchone()[0] or 0.0
+            
+            # Tempo médio de processamento
+            cursor.execute('SELECT AVG(processing_time_seconds) FROM voice_recognition_history WHERE user_id = ?', (user_id,))
+            avg_processing_time = cursor.fetchone()[0] or 0.0
+            
+            # Ingredientes mais reconhecidos
+            cursor.execute('''
+                SELECT ingredients_extracted, COUNT(*) as count
+                FROM voice_recognition_history 
+                WHERE user_id = ? AND ingredients_extracted != ''
+                GROUP BY ingredients_extracted
+                ORDER BY count DESC
+                LIMIT 10
+            ''', (user_id,))
+            top_ingredients = cursor.fetchall()
+            
+            return {
+                'total_recognitions': total_recognitions,
+                'manual_count': manual_count,
+                'automatic_count': total_recognitions - manual_count,
+                'avg_confidence': round(avg_confidence, 2),
+                'avg_processing_time': round(avg_processing_time, 2),
+                'top_ingredients': [{'ingredients': row[0], 'count': row[1]} for row in top_ingredients]
+            }
+    
+    def delete_voice_recognition_history(self, user_id='default_user'):
+        """Limpa histórico de reconhecimento de voz"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('DELETE FROM voice_recognition_history WHERE user_id = ?', (user_id,))
+            return cursor.rowcount
 
 # Instância global do banco de dados
 history_db = HistoryDatabase()

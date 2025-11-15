@@ -1,7 +1,20 @@
 #!/usr/bin/env python3
 """
-Módulo de Reconhecimento de Voz para o Chef RAG
-Permite entrada de ingredientes por comando de voz
+Módulo de Reconhecimento de Voz Avançado - Chef RAG v2
+=======================================================
+
+Sistema completo de reconhecimento de voz em português brasileiro
+com suporte a múltiplos engines e processamento inteligente de ingredientes.
+
+Permite entrada de ingredientes por comando de voz com alta precisão,
+processamento em tempo real e integração completa com o sistema principal.
+
+Funcionalidades:
+- Reconhecimento contínuo de voz
+- Processamento paralelo em threads
+- Calibração automática de microfone
+- Filtragem de ruído e eco
+- Integração com banco de dados
 """
 
 import speech_recognition as sr
@@ -11,7 +24,14 @@ from typing import Optional, List
 
 class VoiceRecognition:
     """
-    Classe para gerenciar reconhecimento de voz
+    Classe principal para gerenciar reconhecimento de voz inteligente
+    
+    Funcionalidades:
+    - Reconhecimento em tempo real
+    - Múltiplos engines de reconhecimento
+    - Processamento assíncrono
+    - Histórico de comandos
+    - Calibração adaptativa
     """
     
     def __init__(self):

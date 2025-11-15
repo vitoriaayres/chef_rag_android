@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 """
-Script para visualizar e gerenciar o histórico de análises de ingredientes
+Visualizador de Histórico - Chef RAG v2
+=======================================
+
+Script para visualizar e gerenciar o histórico completo de análises de ingredientes,
+reconhecimentos de voz, avaliações de receitas e estatísticas do usuário.
+
+Funcionalidades:
+- Resumo estatístico completo
+- Histórico detalhado de análises
+- Busca por ingredientes específicos
+- Exportação de dados
+- Limpeza seletiva de dados
 """
 
 import sys
@@ -8,9 +19,9 @@ import os
 from core_logic.database import history_db
 
 def show_menu():
-    """Exibe o menu de opções do histórico"""
+    """Exibe o menu principal de opções do visualizador de histórico"""
     print("\n" + "="*50)
-    print("📊 HISTÓRICO DE ANÁLISES - Chef RAG")
+    print("📊 VISUALIZADOR DE HISTÓRICO - Chef RAG v2")
     print("="*50)
     print("1. 📈 Mostrar resumo estatístico")
     print("2. 🕐 Análises recentes")

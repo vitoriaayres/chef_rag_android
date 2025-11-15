@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """
-Sistema Chef RAG - Sistema de Análise de Ingredientes e Sugestão de Receitas
+Sistema Chef RAG v2 - Sistema Avançado de Análise de Ingredientes e Sugestão de Receitas
 
 Permite ao usuário escolher entre:
 1. Webcam - Captura imagens em tempo real da webcam
 2. Pasta - Monitor uma pasta para novas imagens
+3. Câmera Mobile - Acesso via dispositivo móvel
+4. Visualizar Histórico - Análise de dados e estatísticas
+5. Interface de Voz Avançada - Reconhecimento de voz com IA
+
+Versão: 2.0 - Novembro 2025
+Desenvolvido com LangChain, ChromaDB e OpenAI
 """
 
 import sys
@@ -31,7 +37,7 @@ def mostrar_menu():
     print("   2. 📱 Usar Câmera do Celular (QR Code)")
     print("   3. 🖼️  Enviar Foto dos Ingredientes")
     print("   4. ✍️  Digitar os Ingredientes")
-    print("   5. 🎤 Falar os Ingredientes")
+    print("   5. 🎤 Interface de Voz Avançada")
     print()
     print("🔧  OUTRAS OPÇÕES:")
     print()
@@ -191,33 +197,105 @@ def digitar_ingredientes():
     input("\nPressione ENTER para voltar ao menu...")
 
 def falar_ingredientes():
-    """Permite falar os ingredientes usando reconhecimento de voz"""
+    """Abre a interface avançada de reconhecimento de voz"""
     limpar_tela()
-    print("\n🎤 RECONHECIMENTO DE VOZ")
+    print("\n🎤 INTERFACE DE VOZ AVANÇADA")
     print("="*50)
-    print("🗣️ Fale os ingredientes que você tem disponível")
+    print("🚀 Abrindo interface visual com métricas de acurácia...")
     print()
     
     try:
-        from core_logic.voice_recognition import voice_recognition
-        from core_logic import rag_system
-        
-        # Testar microfone
-        print("🎧 Testando seu microfone...")
-        teste = voice_recognition.test_microphone()
-        
-        if not teste['available']:
-            print(f"❌ {teste['message']}")
-            print("🔧 Verifique se seu microfone está conectado e funcionando")
-            return
+        # Tentar interface completa primeiro
+        try:
+            from voice_interface_gui import VoiceInterfaceGUI
             
-        print("✅ Microfone funcionando perfeitamente!")
-        print()
-        print("💡 Exemplos do que você pode falar:")
-        print("   • 'Tenho tomate, cebola e alho'")
-        print("   • 'Quero fazer algo com frango e batata'")
-        print("   • 'Ingredientes: ovos, leite e farinha'")
-        print()
+            print("🎧 Iniciando interface de reconhecimento completa...")
+            print("📊 Funcionalidades avançadas:")
+            print("   • Reconhecimento de voz real")
+            print("   • Métricas de acurácia visual")
+            print("   • Comparação com PDF")
+            print("   • Histórico detalhado")
+            print("   • Múltiplas engines de reconhecimento")
+            print()
+            print("⚡ Interface será aberta em nova janela...")
+            
+            app = VoiceInterfaceGUI()
+            app.run()
+            
+        except ImportError:
+            print("⚠️ Interface completa não disponível. Usando versão simplificada...")
+            print()
+            
+            # Interface simplificada
+            from simple_voice_interface import SimpleVoiceInterface
+            
+            print("🎧 Iniciando interface simplificada...")
+            print("📊 Funcionalidades disponíveis:")
+            print("   • Simulação de reconhecimento")
+            print("   • Entrada manual de ingredientes")
+            print("   • Análise de texto completa")
+            print("   • Histórico local")
+            print("   • Comparação de ingredientes")
+            print("   • Métricas e estatísticas")
+            print()
+            print("⚡ Interface será aberta em nova janela...")
+            
+            app = SimpleVoiceInterface()
+            app.run()
+        
+        print("\n✅ Interface de voz finalizada!")
+        
+    except ImportError as e:
+        print(f"❌ Erro ao importar interface de voz: {e}")
+        print("🔧 Dependências necessárias:")
+        print("   • tkinter (geralmente incluído no Python)")
+        print("   • Para reconhecimento real: SpeechRecognition, pyaudio")
+        
+        # Fallback para reconhecimento básico no terminal
+        print("\n🔄 Tentando reconhecimento básico no terminal...")
+        try:
+            from core_logic.voice_recognition import voice_recognition
+            from core_logic import rag_system
+            
+            print("🎙️ Fale seus ingredientes...")
+            ingredientes = voice_recognition.recognize_ingredients()
+            
+            if ingredientes and "erro" not in ingredientes.lower():
+                print(f"\n✅ Ingredientes identificados: {ingredientes}")
+                print("\n🔍 Buscando receitas...")
+                
+                resposta = rag_system.find_recipes_by_ingredient(ingredientes, source_mode="voice")
+                print(f"\n📖 Receitas encontradas:")
+                print(resposta)
+            else:
+                print("❌ Não foi possível reconhecer os ingredientes")
+                print("\n💡 Alternativa: Digite manualmente os ingredientes")
+                ingredientes_manuais = input("🖊️ Digite os ingredientes: ").strip()
+                
+                if ingredientes_manuais:
+                    print(f"\n✅ Ingredientes digitados: {ingredientes_manuais}")
+                    resposta = rag_system.find_recipes_by_ingredient(ingredientes_manuais, source_mode="manual")
+                    print(f"\n📖 Receitas encontradas:")
+                    print(resposta)
+                
+        except Exception as basic_error:
+            print(f"❌ Erro no reconhecimento básico: {basic_error}")
+            print("\n💡 Alternativa simples: Digite os ingredientes")
+            ingredientes_manuais = input("🖊️ Digite os ingredientes que você tem: ").strip()
+            
+            if ingredientes_manuais:
+                try:
+                    from core_logic import rag_system
+                    print(f"\n✅ Ingredientes: {ingredientes_manuais}")
+                    resposta = rag_system.find_recipes_by_ingredient(ingredientes_manuais, source_mode="manual")
+                    print(f"\n📖 Receitas encontradas:")
+                    print(resposta)
+                except Exception:
+                    print("✅ Ingredientes anotados! Você pode buscar receitas manualmente.")
+            
+    except Exception as e:
+        print(f"❌ Erro inesperado: {e}")
+        print("🔧 Tente reiniciar o programa")
         
         input("🎤 Pressione ENTER e comece a falar...")
         
