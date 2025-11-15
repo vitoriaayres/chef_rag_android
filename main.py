@@ -207,7 +207,7 @@ def falar_ingredientes():
     try:
         # Tentar interface completa primeiro
         try:
-            from voice_interface_gui import VoiceInterfaceGUI
+            from reconhecimento_voz_grafico import VoiceInterfaceGUI
             
             print("🎧 Iniciando interface de reconhecimento completa...")
             print("📊 Funcionalidades avançadas:")
@@ -227,7 +227,7 @@ def falar_ingredientes():
             print()
             
             # Interface simplificada
-            from simple_voice_interface import SimpleVoiceInterface
+            from reconhecimento_voz_simples import SimpleVoiceInterface
             
             print("🎧 Iniciando interface simplificada...")
             print("📊 Funcionalidades disponíveis:")
