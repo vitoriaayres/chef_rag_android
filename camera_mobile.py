@@ -123,7 +123,7 @@ def process_image_with_rag(image_path):
         print(f"🔍 Analisando imagem: {image_path}")
         
         # Extrai ingredientes
-        ingredient = rag_system.extract_ingredients_from_image(image_path)
+        ingredient = sistema_rag.extract_ingredients_from_image(image_path)
         
         if "Erro" in ingredient or not ingredient:
             return {
@@ -136,7 +136,7 @@ def process_image_with_rag(image_path):
         print(f"✅ Ingrediente detectado: {ingredient}")
         
         # Busca receitas
-        recipes = rag_system.find_recipes_by_ingredient(ingredient, image_path, "mobile")
+        recipes = sistema_rag.find_recipes_by_ingredient(ingredient, image_path, "mobile")
         recipe_count = recipes.count("Página") if recipes else 0
         
         if not recipes or recipe_count == 0:

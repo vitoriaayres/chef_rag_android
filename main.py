@@ -123,7 +123,7 @@ def enviar_foto_ingredientes():
         print("⏳ Aguarde, a inteligência artificial está trabalhando...")
         
         # Extrair ingredientes
-        ingrediente = rag_system.extract_ingredients_from_image(caminho_imagem)
+        ingrediente = sistema_rag.extract_ingredients_from_image(caminho_imagem)
         
         if "Erro" in ingrediente:
             print("❌ Não foi possível identificar os ingredientes")
@@ -134,7 +134,7 @@ def enviar_foto_ingredientes():
         
         # Buscar receitas
         print("\n🔍 Procurando receitas no seu livro de receitas...")
-        receitas = rag_system.find_recipes_by_ingredient(ingrediente, caminho_imagem, "upload")
+        receitas = sistema_rag.find_recipes_by_ingredient(ingrediente, caminho_imagem, "upload")
         
         if receitas:
             print("\n🍽️ RECEITAS ENCONTRADAS:")
@@ -178,7 +178,7 @@ def digitar_ingredientes():
         print("⏳ Consultando base de receitas...")
         
         # Buscar receitas
-        receitas = rag_system.generate_recipe_suggestion_multiple(ingredientes.split(","))
+        receitas = sistema_rag.generate_recipe_suggestion_multiple(ingredientes.split(","))
         
         if receitas:
             print("\n🍽️ SUGESTÕES DE RECEITAS:")
@@ -310,7 +310,7 @@ def falar_ingredientes():
         print(f"✅ Entendi: {ingredientes}")
         
         print("\n🔍 Procurando receitas...")
-        receitas = rag_system.generate_recipe_suggestion(ingredientes)
+        receitas = sistema_rag.generate_recipe_suggestion(ingredientes)
         
         if receitas:
             print("\n🍽️ RECEITAS SUGERIDAS:")
@@ -367,7 +367,7 @@ def filtrar_por_dieta():
             print("="*60)
             print("🔍 Procurando receitas especiais...")
             
-            receitas = rag_system.find_recipes_by_dietary_filter(filtro)
+            receitas = sistema_rag.find_recipes_by_dietary_filter(filtro)
             
             if receitas:
                 print(receitas)

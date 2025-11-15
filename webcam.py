@@ -264,7 +264,7 @@ def run_webcam_capture():
             cv2.imwrite(SNAPSHOT_INTERVAL, frame)
             
             print("🧠 Processando com IA...")
-            ingredient = rag_system.extract_ingredients_from_image(SNAPSHOT_INTERVAL)
+            ingredient = sistema_rag.extract_ingredients_from_image(SNAPSHOT_INTERVAL)
 
             if "Erro" in ingredient:
                 print("❌ Ingrediente não identificado")
@@ -278,7 +278,7 @@ def run_webcam_capture():
             last_ingredient = ingredient
             status = "success"
             
-            recipes = rag_system.find_recipes_by_ingredient(ingredient, SNAPSHOT_INTERVAL, "webcam")
+            recipes = sistema_rag.find_recipes_by_ingredient(ingredient, SNAPSHOT_INTERVAL, "webcam")
             recipe_count = recipes.count("Página") if recipes else 0
             
             if not recipes:
