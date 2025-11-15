@@ -5,7 +5,7 @@ import threading
 import numpy as np
 from datetime import datetime
 from core_logic import config 
-from core_logic import rag_system
+from core_logic import sistema_rag
 
 SNAPSHOT_INTERVAL = os.path.join(config.BASE_DIR, "..", "temp_snapshot.jpg")
 

@@ -16,7 +16,7 @@ Desenvolvido com LangChain, ChromaDB e OpenAI
 import sys
 import os
 from core_logic import config
-from core_logic.cleanup_manager import setup_image_cleanup
+from core_logic.gerenciador_limpeza import setup_image_cleanup
 
 def limpar_tela():
     """Limpa a tela do terminal"""
@@ -53,7 +53,7 @@ def mostrar_menu():
 def executar_historico():
     """Executa o visualizador de histórico"""
     try:
-        from history_viewer import main as history_main
+        from visualizador_historico import main as history_main
         print("\n📄 Abrindo seu histórico de receitas...")
         history_main()
     except ImportError:
@@ -254,7 +254,7 @@ def falar_ingredientes():
         # Fallback para reconhecimento básico no terminal
         print("\n🔄 Tentando reconhecimento básico no terminal...")
         try:
-            from core_logic.voice_recognition import voice_recognition
+            from core_logic.reconhecimento_voz import voice_recognition
             from core_logic import rag_system
             
             print("🎙️ Fale seus ingredientes...")

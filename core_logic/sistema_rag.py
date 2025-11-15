@@ -2,7 +2,7 @@ import chromadb
 from PIL import Image
 from . import config
 from . import database
-from .ai_providers import ai_provider, get_ai_response, analyze_image_with_ai
+from .provedores_ia import ai_provider, get_ai_response, analyze_image_with_ai
 import time 
 import requests
 

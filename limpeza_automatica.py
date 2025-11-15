@@ -128,7 +128,7 @@ def verificar_sistema():
         print("✅ main.py - OK")
         
         # Testar core_logic
-        from core_logic import config, rag_system, database
+        from core_logic import config, sistema_rag, database
         print("✅ core_logic - OK")
         
         print("🎉 Sistema íntegro após limpeza!")

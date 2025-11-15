@@ -30,7 +30,7 @@ sys.path.insert(0, current_dir)
 # Importar sistema RAG
 rag_system = None
 try:
-    from core_logic.rag_system import RAGSystem
+    from core_logic import sistema_rag
     rag_system = RAGSystem()
     print("✅ Sistema RAG carregado com sucesso!")
 except Exception as e:
