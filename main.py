@@ -461,8 +461,9 @@ def mostrar_menu():
     print("   9. ⏰ Gerenciar Cronômetros")
     print("  10. Ver Histórico de Receitas")
     print("  11. Meu Perfil")
+    print("  12. Ver Créditos")
     print()
-    print("  12. Sair do Sistema")
+    print("  13. Sair do Sistema")
 
 def usar_camera_pc():
     """Executa a interface da câmera do computador com YOLO"""
@@ -886,12 +887,48 @@ def meu_perfil():
         
     input("\nPressione ENTER para voltar ao menu...")
 
+def mostrar_creditos():
+    """Exibe os créditos do sistema"""
+    limpar_tela()
+    print("\n" + "="*60)
+    print("🧑‍🍳 CHEF RAG - CRÉDITOS")
+    print("="*60)
+    print()
+    print("📋 DESENVOLVIDO POR:")
+    print("   • Vitória Ayres")
+    print()
+    print("🛠️ TECNOLOGIAS ENVOLVIDAS:")
+    print("   • Python")
+    print("   • LangChain")
+    print("   • ChromaDB")
+    print("   • OpenCV")
+    print("   • YOLO")
+    print("   • Tkinter")
+    print("   • SQLite")
+    print("   • Pandas")
+    print("   • Speech Recognition")
+    print("   • Flask")
+    print("   • RAG (Retrieval-Augmented Generation)")
+    print()
+    print("🎯 FUNCIONALIDADES:")
+    print("   • Reconhecimento de ingredientes por imagem")
+    print("   • Reconhecimento de voz")
+    print("   • Sistema de busca inteligente")
+    print("   • Filtros dietéticos")
+    print("   • Calculadora de calorias")
+    print("   • Verificador de alergias")
+    print("   • Cronômetros de cozinha")
+    print("   • Interface mobile")
+    print()
+    print("="*60)
+    input("\nPressione ENTER para voltar ao menu...")
+
 def main():
     """Função principal - loop do menu"""
     while True:
         try:
             mostrar_menu()
-            opcao = input("\nDigite sua escolha (1-12): ").strip()
+            opcao = input("\nDigite sua escolha (1-13): ").strip()
             
             if opcao == "1":
                 usar_camera_pc()
@@ -916,11 +953,13 @@ def main():
             elif opcao == "11":
                 meu_perfil()
             elif opcao == "12":
+                mostrar_creditos()
+            elif opcao == "13":
                 print("\nObrigado por usar o Chef RAG!")
                 print("Bom apetite e até a próxima!")
                 break
             else:
-                print("\nOpção inválida! Digite um número de 1 a 12.")
+                print("\nOpção inválida! Digite um número de 1 a 13.")
                 input("Pressione ENTER para continuar...")
                 
         except KeyboardInterrupt:

@@ -13,7 +13,7 @@ if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY não encontrada no arquivo .env")
 
 ACTIVE_PROVIDER = "openai"
-print(f"🤖 Usando provedor de IA: {ACTIVE_PROVIDER.upper()}")
+# print(f"🤖 Usando provedor de IA: {ACTIVE_PROVIDER.upper()}")  # Comentado para interface limpa
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PDF_FILE_PATH = os.path.join(BASE_DIR, "..", "data", "pdf", "livro.pdf")
