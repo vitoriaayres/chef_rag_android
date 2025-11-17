@@ -109,14 +109,14 @@ def mostrar_modo_preparo_csv(receita):
         print("3. Avaliar receita") 
         print("4. Voltar ao menu")
         
-        opcao = input("\n👨‍🍳 Escolha uma opção (1-4): ").strip()
+        opcao = input("\nEscolha uma opção (1-4): ").strip()
         
         if opcao == "1":
             abrir_interface_grafica_receita(receita)
             break
         elif opcao == "2":
-            print(f"\n📋 DETALHES ADICIONAIS:")
-            print(f"🔍 Matches encontrados: {', '.join(receita['matches'][:5])}")
+            print(f"\nDETALHES ADICIONAIS:")
+            print(f"Matches encontrados: {', '.join(receita['matches'][:5])}")
             input("\nPressione ENTER para continuar...")
         elif opcao == "3":
             avaliar_receita(receita['titulo'])
@@ -124,11 +124,11 @@ def mostrar_modo_preparo_csv(receita):
         elif opcao == "4":
             break
         else:
-            print("❌ Opção inválida")
+            print("Opção inválida")
 
 def avaliar_receita(titulo_receita):
     """Permite avaliar uma receita"""
-    print(f"\n⭐ AVALIAR: {titulo_receita}")
+    print(f"\nAVALIAR: {titulo_receita}")
     print("-" * 50)
     
     try:
@@ -136,13 +136,13 @@ def avaliar_receita(titulo_receita):
         comentario = input("Comentário (opcional): ").strip()
         
         if nota in ['1', '2', '3', '4', '5']:
-            print(f"✅ Receita '{titulo_receita}' avaliada com {nota} estrelas!")
+            print(f"Receita '{titulo_receita}' avaliada com {nota} estrelas!")
             if comentario:
                 print(f"💬 Comentário: {comentario}")
         else:
-            print("❌ Nota deve ser entre 1 e 5")
+            print("Nota deve ser entre 1 e 5")
     except:
-        print("❌ Erro na avaliação")
+        print("Erro na avaliação")
     
     input("\nPressione ENTER para continuar...")
 
@@ -209,7 +209,7 @@ def mostrar_modo_preparo(receita_escolhida):
     texto_completo = receita_escolhida.get('texto_completo', '')
     
     print("\n" + "="*80)
-    print(f"👨‍🍳 COZINHANDO: {nome}")
+        print(f"COZINHANDO: {nome}")
     print("="*80)
     
     # Extrair TODAS as informações disponíveis
@@ -224,7 +224,7 @@ def mostrar_modo_preparo(receita_escolhida):
     
     # 2. MODO DE PREPARO (passos numerados)
     if info_receita['modo_preparo']:
-        print(f"\n👨‍🍳 MODO DE PREPARO:")
+        print(f"\nMODO DE PREPARO:")
         print("-" * 50)
         for i, passo in enumerate(info_receita['modo_preparo'], 1):
             print(f"  {i}. {passo}")
@@ -247,14 +247,14 @@ def mostrar_modo_preparo(receita_escolhida):
     
     # 4. DICAS E OBSERVAÇÕES
     if info_receita['dicas']:
-        print(f"\n💡 DICAS:")
+        print(f"\nDICAS:")
         print("-" * 50)
         for dica in info_receita['dicas']:
             print(f"  • {dica}")
     
     # 5. EQUIPAMENTOS NECESSÁRIOS
     if info_receita['equipamentos']:
-        print(f"\n🔧 EQUIPAMENTOS:")
+        print(f"\nEQUIPAMENTOS:")
         print("-" * 50)
         for equip in info_receita['equipamentos']:
             print(f"  • {equip}")
