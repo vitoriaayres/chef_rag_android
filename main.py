@@ -276,7 +276,7 @@ def mostrar_modo_preparo(receita_escolhida):
                 print(f"  {linha}")
     
     print("\n" + "="*80)
-    print("🔄 OPÇÕES:")
+    print("OPÇÕES:")
     print("  1. 🔙 Voltar para lista de receitas")
     print("  2. 🏠 Voltar ao menu principal")
     print("  3. 📋 Ver receita completa (texto original)")
@@ -636,7 +636,7 @@ def digitar_ingredientes():
                     print("1. 🖥️  Ver receita na interface gráfica passo a passo")
                     if len(receitas_csv) > 1:
                         print("2. 📋 Ver outras receitas disponíveis")
-                        print("3. 🔄 Escolher receita diferente")
+                        print("3. Escolher receita diferente")
                         print("4. 🔙 Voltar ao menu principal")
                         max_opcao = 4
                     else:
