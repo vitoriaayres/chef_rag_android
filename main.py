@@ -487,7 +487,6 @@ def usar_camera_pc():
 def usar_camera_celular():
     """Executa a interface da câmera do celular"""
     try:
-        print("\n📱 Abrindo servidor para celular...")
         from camera_mobile import start_mobile_server
         start_mobile_server()
     except ImportError:
@@ -499,16 +498,13 @@ def usar_camera_celular():
 def enviar_foto_ingredientes():
     """Abre interface para upload de fotos"""
     try:
-        print("\n📸 Abrindo interface de upload de fotos...")
         from interface_upload_foto import PhotoAnalysisInterface
         app = PhotoAnalysisInterface()
         app.run()
-        print("✅ Interface de fotos finalizada!")
     except ImportError as e:
-        print(f"❌ Erro ao importar interface de fotos: {e}")
-        print("💡 Verifique se todas as dependências estão instaladas")
+        print(f"Erro ao importar interface de fotos: {e}")
     except Exception as e:
-        print(f"❌ Erro na interface de fotos: {e}")
+        print(f"Erro na interface de fotos: {e}")
         input("\nPressione ENTER para continuar...")
 
 def digitar_ingredientes():
@@ -685,44 +681,37 @@ def digitar_ingredientes():
 def falar_ingredientes():
     """Abre a interface de reconhecimento de voz"""
     try:
-        print("\n🎤 Abrindo interface de reconhecimento de voz...")
         from reconhecimento_voz_simples import SimpleVoiceInterface
         app = SimpleVoiceInterface()
         app.run()
-        print("✅ Interface de voz finalizada!")
     except ImportError as e:
-        print(f"❌ Erro ao importar interface de voz: {e}")
-        print("💡 Execute: python instalar_dependencias_voz.py")
+        print(f"Erro ao importar interface de voz: {e}")
+        print("Execute: python instalar_dependencias_voz.py")
     except Exception as e:
-        print(f"❌ Erro na interface de voz: {e}")
+        print(f"Erro na interface de voz: {e}")
         input("\nPressione ENTER para continuar...")
 
 def executar_historico():
     """Executa o visualizador de histórico"""
     try:
-        print("\n📊 Abrindo visualizador de histórico...")
         from visualizador_historico import main as history_main
         history_main()
-        print("✅ Histórico finalizado!")
     except ImportError:
-        print("❌ Sistema de histórico não encontrado")
+        print("Sistema de histórico não encontrado")
     except Exception as e:
-        print(f"❌ Erro ao abrir histórico: {e}")
+        print(f"Erro ao abrir histórico: {e}")
         input("\nPressione ENTER para continuar...")
 
 def filtrar_dieta_especial():
     """Abre interface de filtros dietéticos"""
     try:
-        print("\n🥗 Abrindo interface de filtros dietéticos...")
         from interface_filtros_dieta import DietFilterInterface
         app = DietFilterInterface()
         app.run()
-        print("✅ Interface de filtros finalizada!")
     except ImportError as e:
-        print(f"❌ Erro ao importar interface de filtros: {e}")
-        print("💡 Verifique se todas as dependências estão instaladas")
+        print(f"Erro ao importar interface de filtros: {e}")
     except Exception as e:
-        print(f"❌ Erro na interface de filtros: {e}")
+        print(f"Erro na interface de filtros: {e}")
         input("\nPressione ENTER para continuar...")
 
 def calcular_calorias():
