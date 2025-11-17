@@ -717,23 +717,20 @@ def filtrar_dieta_especial():
 def calcular_calorias():
     """Abre interface da calculadora de calorias"""
     try:
-        print("\n⚖️ Abrindo calculadora de calorias...")
         from interface_calculadora_calorias import CalorieCalculatorInterface
         app = CalorieCalculatorInterface()
         app.run()
-        print("✅ Calculadora de calorias finalizada!")
     except ImportError as e:
-        print(f"❌ Erro ao importar calculadora: {e}")
-        print("💡 Verifique se todas as dependências estão instaladas")
+        print(f"Erro ao importar calculadora: {e}")
     except Exception as e:
-        print(f"❌ Erro na calculadora: {e}")
+        print(f"Erro na calculadora: {e}")
         input("\nPressione ENTER para continuar...")
 
 def verificar_alergias():
     """Verificar alergias em receitas"""
     limpar_tela()
-    print("\n🚫 VERIFICAR ALERGIAS")
-    print("="*50)
+    print("\nVERIFICAR ALERGIAS")
+    print("="*30)
     print("Alergias comuns:")
     print("• Amendoim • Nozes • Leite")
     print("• Ovos • Glúten • Frutos do mar")
@@ -742,7 +739,7 @@ def verificar_alergias():
     receita = input("Digite a receita para verificar: ").strip().lower()
     
     if alergia and receita:
-        print(f"\n🔍 Verificando {alergia} em: {receita}")
+        print(f"\nVerificando {alergia} em: {receita}")
         
         # Base de dados de ingredientes alergênicos
         alergenos = {
