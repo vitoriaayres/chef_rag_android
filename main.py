@@ -706,7 +706,7 @@ def executar_historico():
 def filtrar_dieta_especial():
     """Abre interface de filtros dietéticos"""
     try:
-        from interface_filtros_dieta import DietFilterInterface
+        from interfaces.interface_filtros_dieta import DietFilterInterface
         app = DietFilterInterface()
         app.run()
     except ImportError as e:
@@ -718,7 +718,7 @@ def filtrar_dieta_especial():
 def calcular_calorias():
     """Abre interface da calculadora de calorias"""
     try:
-        from interface_calculadora_calorias import CalorieCalculatorInterface
+        from interfaces.interface_calculadora_calorias import CalorieCalculatorInterface
         app = CalorieCalculatorInterface()
         app.run()
     except ImportError as e:
@@ -804,7 +804,7 @@ def gerenciar_cronometros():
     """Abre a interface de cronômetros de cozinha"""
     try:
         print("\n⏰ Abrindo cronômetros de cozinha...")
-        from interface_cronometros_cozinha import TimerKitchenInterface
+        from interfaces.interface_cronometros_cozinha import TimerKitchenInterface
         app = TimerKitchenInterface()
         app.run()
         print("✅ Interface de cronômetros finalizada!")
@@ -1066,4 +1066,5 @@ def mostrar_modo_preparo_detalhado(receita):
     print("    PRONTO PARA COZINHAR!")
     print("="*50)
 
-if __n
+if __name__ == "__main__":
+    main()
