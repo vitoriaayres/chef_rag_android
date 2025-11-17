@@ -92,3 +92,27 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+# Node.js e Frontend
+frontend/node_modules/
+frontend/package-lock.json
+*.log
+npm-debug.log*
+
+# Venv e Python env
+venv/
+env/
+.venv/
+
+# Cache e temp
+.cache/
+temp_uploads/*
+!temp_uploads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
