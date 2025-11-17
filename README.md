@@ -1,161 +1,137 @@
-# 🍳 Chef RAG v2 - Sistema Inteligente de Culinária
+# 🧑‍🍳 Chef RAG - Assistente Culinário Inteligente
 
-Um sistema avançado de assistente culinário que combina Inteligência Artificial, sistemas inspirados no LangChain/LangGraph, RAG (Retrieval-Augmented Generation) e análise de imagens para oferecer uma experiência culinária completa e personalizada.
+Sistema de recomendação de receitas baseado em IA que utiliza RAG (Retrieval-Augmented Generation) para sugerir receitas com base nos ingredientes disponíveis.
 
-## ✨ Principais Funcionalidades
+## ✨ Funcionalidades Principais
 
-### 🧠 Sistemas Inteligentes (LangChain/LangGraph Inspired)
-- **ChefAgent**: Agente inteligente com ferramentas especializadas
-- **ChefWorkflow**: Pipeline de processamento de 7 etapas
-- **SimpleRAGSystem**: Sistema RAG avançado para consultas inteligentes
-- **ChefMemory**: Gerenciamento de memória e contexto
+- 📷 **Análise por Câmera**: Detecta ingredientes via webcam usando YOLO
+- 📱 **Versão Mobile**: Interface mobile com QR Code
+- 🖼️ **Upload de Fotos**: Analisa ingredientes em fotos enviadas
+- ✍️ **Entrada Manual**: Digite os ingredientes disponíveis
+- 🎤 **Reconhecimento de Voz**: Fale os ingredientes
+- 🥗 **Filtros Dietéticos**: Filtra por restrições alimentares
+- ⚖️ **Calculadora de Calorias**: Calcula valor nutricional
+- 🚫 **Verificador de Alergias**: Identifica possíveis alérgenos
+- ⏰ **Cronômetros**: Gerencia tempos de preparo
 
-### 📱 Interfaces Múltiplas
-- **Web Interface**: React/Vite moderna
-- **Mobile App**: React Native multiplataforma  
-- **API REST**: APIs completas para integração
-- **CLI**: Interface de linha de comando
+## 🎯 Diferenciais
 
-### 🔍 IA Avançada
-- Análise inteligente de imagens de alimentos
-- Reconhecimento de ingredientes por foto
-- Sugestões de receitas personalizadas
-- Cálculo automático de nutrição
-- Geração de listas de compras
-- Timer inteligente para receitas
+- **Foco 100% no Passo a Passo**: Prioriza instruções detalhadas de preparo
+- **Sistema CSV de Alta Precisão**: Base de dados estruturada com receitas brasileiras
+- **Interface Gráfica Interativa**: Modo passo a passo visual
+- **Busca Inteligente**: Compatibilidade por percentual de ingredientes
+- **Múltiplas Formas de Entrada**: Câmera, voz, texto, foto
 
-## 🚀 Quick Start
+## 🚀 Instalação
 
+1. **Clone o repositório**:
 ```bash
-# Clone e configure
-git clone [repository-url]
-cd chef_rag_v2
-pip install -r requirements_mobile.txt
+git clone https://github.com/vitoriaayres/chef_rag_android.git
+cd chef_rag_android
+```
 
-# Execute o sistema
+2. **Crie um ambiente virtual**:
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# ou
+venv\Scripts\activate  # Windows
+```
+
+3. **Instale as dependências**:
+```bash
+pip install -r requirements.txt
+```
+
+4. **Configure as variáveis de ambiente**:
+Crie um arquivo `.env` com sua chave da OpenAI:
+```
+OPENAI_API_KEY=sua_chave_aqui
+```
+
+## 🎮 Como Usar
+
+### Executar o Sistema Principal
+```bash
 python main.py
-
-# Teste os sistemas inteligentes
-python test_smart_systems.py
 ```
 
-## 📊 Sistemas Inteligentes
+### Testar Funcionalidades Específicas
+```bash
+# Testar sistema de busca
+python sistema_busca_csv.py
 
-### ChefAgent - Agente com Ferramentas
-```python
-from core_logic.smart_chef_system import ChefAgent
+# Testar webcam com YOLO
+python webcam.py
 
-agent = ChefAgent()
-response = agent.process_with_smart_agent("frango com legumes", image_path="imagem.jpg")
+# Análise de fotos
+python interface_upload_foto.py
 ```
 
-**Ferramentas:**
-- 🖼️ Análise de imagens
-- 🔍 Busca de receitas  
-- 🥗 Cálculo nutricional
-- ⏰ Timer de cozimento
-- 🛒 Lista de compras
-
-### ChefWorkflow - Pipeline de 7 Etapas
-```python
-from core_logic.smart_chef_system import ChefWorkflow
-
-workflow = ChefWorkflow()
-result = workflow.process_with_smart_workflow("ingredientes: frango, batata")
-```
-
-**Pipeline:**
-1. Análise de entrada → 2. Processamento de imagem → 3. Busca de receitas → 4. Cálculo nutricional → 5. Lista de compras → 6. Timeline → 7. Resposta final
-
-### SimpleRAGSystem - RAG Nativo
-```python
-from core_logic.smart_chef_system import SimpleRAGSystem
-
-rag = SimpleRAGSystem()
-answer = rag.query_with_smart_rag("Como fazer risoto?")
-```
 ## 📁 Estrutura do Projeto
 
 ```
 chef_rag_v2/
-├── 🧠 core_logic/              # Sistemas inteligentes e IA
-│   ├── smart_chef_system.py    # Sistemas LangChain/LangGraph inspired
-│   ├── smart_integration.py    # Camada de integração
-│   ├── cleanup_manager.py      # Gerenciamento automático
-│   └── rag_system.py          # RAG original
-├── 📱 android_rag_chef/        # App React Native
-├── 🌐 frontend/               # Interface Web React
-├── 🧪 test_*.py              # Testes automatizados
-└── 📊 main.py                 # Aplicação principal
+├── main.py                        # Interface principal
+├── sistema_busca_csv.py           # Sistema de busca por CSV
+├── receitas_estruturadas.csv      # Base de dados de receitas
+├── webcam.py                      # Análise por câmera
+├── webcam_yolo.py                # YOLO para detecção de ingredientes
+├── core_logic/                    # Lógica principal do RAG
+│   ├── sistema_rag.py            # Engine principal
+│   ├── processamento_imagem.py   # Análise de imagens
+│   └── gerenciamento_dados.py    # Gestão de dados
+├── interface_*.py                 # Interfaces específicas
+├── reconhecimento_voz_*.py       # Sistema de voz
+├── camera_mobile.py              # Servidor mobile
+├── requirements.txt              # Dependências
+└── README.md                     # Este arquivo
 ```
 
-## 🎯 Tecnologias
+## 🧠 Como Funciona
 
-- **Backend**: Python, FastAPI, ChromaDB
-- **Frontend**: React, Vite, React Native
-- **IA**: RAG System, Computer Vision, LangChain-inspired
-- **Database**: Vector Database (Chroma), SQLite
+1. **Entrada de Dados**: O usuário fornece ingredientes via câmera, voz, texto ou foto
+2. **Processamento IA**: O sistema analisa e identifica ingredientes usando modelos de IA
+3. **Busca Inteligente**: Algoritmo busca receitas compatíveis no banco de dados CSV
+4. **Ranqueamento**: Receitas são ordenadas por compatibilidade percentual
+5. **Apresentação**: Foco principal no passo a passo detalhado de preparo
+6. **Interface Interativa**: Opção de interface gráfica para acompanhar o preparo
 
-## 🧪 Testes e Demo
+## 📊 Base de Dados
 
-```bash
-# Testes completos
-python test_smart_systems.py
+- **12+ receitas estruturadas** com ingredientes, modo de preparo, tempo e dificuldade
+- **Sistema de compatibilidade** que calcula percentual de match
+- **Receitas brasileiras** com ingredientes locais
+- **Categorias diversas**: doces, salgados, bebidas, pratos principais
 
-# Demo interativo
-python test_smart_systems.py --demo
+## 🛠️ Tecnologias Utilizadas
 
-# Benchmark de performance  
-python test_smart_systems.py --performance
-```
+- **Python 3.8+**
+- **OpenAI GPT** para análise de ingredientes
+- **LangChain** para RAG
+- **YOLO v8** para detecção de objetos
+- **OpenCV** para processamento de imagem
+- **Tkinter** para interface gráfica
+- **Flask** para servidor mobile
+- **SpeechRecognition** para entrada por voz
 
-## 📈 Performance
-- **ChefAgent**: ~1.2s tempo médio
-- **ChefWorkflow**: ~2.1s análise completa  
-- **RAGSystem**: ~0.3s consultas
-- **Cleanup**: Automático e otimizado
+## 🤝 Contribuindo
 
-## 🔄 APIs Disponíveis
-
-```
-POST /analyze_image       # Análise de imagens
-POST /smart_agent        # Agente inteligente
-POST /smart_workflow     # Pipeline completo
-GET  /recipe_search      # Busca de receitas
-POST /nutrition         # Informações nutricionais
-```
-
-## 🎮 Interfaces
-
-### Web Interface
-```bash
-cd frontend && npm run dev
-```
-
-### Mobile App
-```bash
-cd android_rag_chef && npx react-native run-android
-```
-
-### API REST
-```bash
-python mobile_api.py
-```
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/NewFeature`)
-3. Commit as mudanças (`git commit -m 'Add NewFeature'`)
-4. Push (`git push origin feature/NewFeature`)
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
 ## 📄 Licença
 
-MIT License. Veja `LICENSE` para detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 👨‍💻 Autores
+
+- **Chef RAG Team** - Desenvolvimento inicial
+- **Vitória Ayres** - Repositório GitHub
 
 ---
 
-**Chef RAG v2** - *Transformando a culinária através da IA* 🍳✨
-
-📚 **Documentação Completa**: `README_COMPLETO.md`
+💡 **Dica**: Para melhor experiência, use em ambiente com boa iluminação para análise por câmera!
