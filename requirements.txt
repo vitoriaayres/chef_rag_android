@@ -5,8 +5,13 @@
 openai>=1.0.0
 langchain>=0.1.0
 langchain-community>=0.0.20
+langchain-openai>=0.1.0
 sentence-transformers>=2.2.0
 faiss-cpu>=1.7.0
+
+# LangSmith para monitoramento
+langsmith>=0.1.0
+langchain-core>=0.1.0
 
 # Processamento de Dados
 pandas>=2.0.0
@@ -14,6 +19,7 @@ numpy>=1.24.0
 
 # Interface Gráfica
 tkinter-modern>=1.0.0
+matplotlib>=3.7.0
 
 # Processamento de Imagem  
 opencv-python>=4.8.0
@@ -32,6 +38,10 @@ requests>=2.31.0
 
 # QR Code
 qrcode[pil]>=7.4.0
+
+# Banco de dados
+chromadb>=0.4.0
+sqlite3  # Built-in Python
 
 # Utilidades
 python-dotenv>=1.0.0

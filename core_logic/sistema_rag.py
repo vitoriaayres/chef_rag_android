@@ -3,6 +3,7 @@ from PIL import Image
 from . import config
 from . import database
 from .provedores_ia import ai_provider, get_ai_response, analyze_image_with_ai
+from .agent_environment import get_agent_system
 import time 
 import requests
 

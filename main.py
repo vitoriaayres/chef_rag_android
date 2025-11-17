@@ -462,8 +462,9 @@ def mostrar_menu():
     print("  10. Ver Histórico de Receitas")
     print("  11. Meu Perfil")
     print("  12. Ver Créditos")
+    print("  13. 📊 Dashboard de Monitoramento")
     print()
-    print("  13. Sair do Sistema")
+    print("  14. Sair do Sistema")
 
 def usar_camera_pc():
     """Executa a interface da câmera do computador com YOLO"""
@@ -923,12 +924,25 @@ def mostrar_creditos():
     print("="*60)
     input("\nPressione ENTER para voltar ao menu...")
 
+def abrir_dashboard_monitoring():
+    """Abre o dashboard de monitoramento"""
+    try:
+        from interfaces.interface_monitoring_dashboard import MonitoringDashboard
+        dashboard = MonitoringDashboard()
+        dashboard.run()
+    except ImportError as e:
+        print(f"Erro ao importar dashboard: {e}")
+        print("Execute: pip install langsmith matplotlib")
+    except Exception as e:
+        print(f"Erro no dashboard: {e}")
+        input("\nPressione ENTER para continuar...")
+
 def main():
     """Função principal - loop do menu"""
     while True:
         try:
             mostrar_menu()
-            opcao = input("\nDigite sua escolha (1-13): ").strip()
+            opcao = input("\nDigite sua escolha (1-14): ").strip()
             
             if opcao == "1":
                 usar_camera_pc()
@@ -955,11 +969,13 @@ def main():
             elif opcao == "12":
                 mostrar_creditos()
             elif opcao == "13":
+                abrir_dashboard_monitoring()
+            elif opcao == "14":
                 print("\nObrigado por usar o Chef RAG!")
                 print("Bom apetite e até a próxima!")
                 break
             else:
-                print("\nOpção inválida! Digite um número de 1 a 13.")
+                print("\nOpção inválida! Digite um número de 1 a 14.")
                 input("Pressione ENTER para continuar...")
                 
         except KeyboardInterrupt:

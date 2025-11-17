@@ -8,6 +8,12 @@ AI_PROVIDER = os.getenv("AI_PROVIDER", "openai")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
+# LangSmith Configuration
+LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
+LANGCHAIN_TRACING_V2 = os.getenv("LANGCHAIN_TRACING_V2", "true")
+LANGCHAIN_PROJECT = os.getenv("LANGCHAIN_PROJECT", "chef-rag-v2")
+LANGCHAIN_ENDPOINT = os.getenv("LANGCHAIN_ENDPOINT", "https://api.smith.langchain.com")
+
 # Verificar configuração
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY não encontrada no arquivo .env")
