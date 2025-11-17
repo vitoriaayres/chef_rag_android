@@ -182,7 +182,7 @@ def run_webcam_capture():
     cv2.resizeWindow(window_name, 1280, 720)
     
     print("\n" + "="*60)
-    print("CHEF RAG - WEBCAM ATIVADA")
+    print("📷 CHEF RAG - WEBCAM MODERNA ATIVADA")
     print("="*60)
     print("🎯 Interface moderna carregada")
     print("📹 Resolução: 1280x720")
@@ -332,7 +332,7 @@ def run_webcam_capture():
                     show_popup = True
                     popup_timer = 0
             
-            print("Pronto para próxima captura...")
+            print("📷 Pronto para próxima captura...")
             
         elif key == ord('h'):
             print("\n📊 ABRINDO HISTÓRICO...")
@@ -353,7 +353,7 @@ def webcam_recipe_selection(receitas):
             escolha = input(f"👨‍🍳 Digite o número da receita (1-{min(5, len(receitas))}) ou 0 para continuar: ").strip()
             
             if escolha == "0":
-                print("Continuando captura...")
+                print("📷 Continuando captura...")
                 break
             
             try:
