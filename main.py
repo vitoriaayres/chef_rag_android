@@ -23,7 +23,7 @@ try:
     busca_csv = BuscaReceitasCSV()
 except ImportError:
     busca_csv = None
-    print("⚠️ Sistema CSV não disponível, usando busca básica")
+    print("Sistema CSV não disponível, usando busca básica")
 
 def extrair_receitas_csv(ingredientes):
     """Extrai receitas do sistema CSV em formato de lista"""
@@ -60,7 +60,7 @@ def mostrar_modo_preparo_csv(receita):
     """Mostra o modo de preparo de uma receita do CSV com informações completas"""
     limpar_tela()
     print("\n" + "="*80)
-    print(f"🍽️  {receita['titulo']}")
+    print(f"{receita['titulo']}")
     print("="*80)
     
     # Informações da receita
@@ -69,7 +69,7 @@ def mostrar_modo_preparo_csv(receita):
     print(f"📂 Categoria: {receita['categoria']}")
     print(f"⏰ Tempo de preparo: {receita['tempo_preparo']}")
     print(f"📊 Dificuldade: {receita['dificuldade']}")
-    print(f"🎯 Compatibilidade: {receita['score']:.1f}%")
+    print(f"Compatibilidade: {receita['score']:.1f}%")
     
     # Ingredientes completos
     print(f"\n🥬 INGREDIENTES COMPLETOS:")
@@ -78,7 +78,7 @@ def mostrar_modo_preparo_csv(receita):
     for i, ing in enumerate(ingredientes_lista, 1):
         print(f"  {i}. {ing}")
     
-    print(f"\n🔍 INGREDIENTES PARA BUSCA:")
+    print(f"\nINGREDIENTES PARA BUSCA:")
     print(f"   {receita.get('ingredientes_busca', 'N/A')}")
     
     # Modo de preparo completo
@@ -94,7 +94,7 @@ def mostrar_modo_preparo_csv(receita):
     
     # Mostrar matches de ingredientes
     if receita.get('matches'):
-        print(f"\n🎯 INGREDIENTES ENCONTRADOS:")
+        print(f"\nINGREDIENTES ENCONTRADOS:")
         print("-" * 50)
         for match in receita['matches'][:5]:  # Mostrar até 5 matches
             print(f"   • {match}")
@@ -103,11 +103,11 @@ def mostrar_modo_preparo_csv(receita):
     
     # Menu de opções
     while True:
-        print("\n🔥 OPÇÕES:")
-        print("1. 🖥️  Abrir interface gráfica passo a passo")
-        print("2. 📊 Ver mais detalhes")
-        print("3. ⭐ Avaliar receita") 
-        print("4. 🔙 Voltar ao menu")
+        print("\nOPÇÕES:")
+        print("1. Abrir interface gráfica passo a passo")
+        print("2. Ver mais detalhes")
+        print("3. Avaliar receita") 
+        print("4. Voltar ao menu")
         
         opcao = input("\n👨‍🍳 Escolha uma opção (1-4): ").strip()
         
@@ -632,7 +632,7 @@ def digitar_ingredientes():
                 
                 # Menu de ações focado no passo a passo
                 while True:
-                    print(f"\n🎯 AÇÕES DISPONÍVEIS:")
+                    print(f"\nAÇÕES DISPONÍVEIS:")
                     print("1. 🖥️  Ver receita na interface gráfica passo a passo")
                     if len(receitas_csv) > 1:
                         print("2. 📋 Ver outras receitas disponíveis")
@@ -768,19 +768,19 @@ def verificar_alergias():
                     alergia_encontrada = True
                     ingredientes_perigosos.append(ingrediente_alergico)
         
-        print("\n" + "="*50)
+        print("\n" + "="*30)
         if alergia_encontrada:
-            print("🔴 ATENÇÃO - RISCO DE ALERGIA DETECTADO!")
-            print(f"\n⚠️ Ingredientes problemáticos encontrados:")
+            print("ATENÇÃO - RISCO DE ALERGIA DETECTADO!")
+            print(f"\nIngredientes problemáticos encontrados:")
             for ingrediente in ingredientes_perigosos:
                 print(f"   • {ingrediente.title()}")
-            print(f"\n🚨 NÃO recomendado para pessoas com alergia a {alergia}")
+            print(f"\nNÃO recomendado para pessoas com alergia a {alergia}")
         else:
-            print("🟢 RECEITA APARENTEMENTE SEGURA")
-            print(f"\n✅ Nenhum ingrediente relacionado a {alergia} foi detectado")
-            print("\n⚠️ Sempre verifique os rótulos dos produtos industrializados")
+            print("RECEITA APARENTEMENTE SEGURA")
+            print(f"\nNenhum ingrediente relacionado a {alergia} foi detectado")
+            print("\nSempre verifique os rótulos dos produtos industrializados")
         
-        print("="*50)
+        print("="*30)
         
         # Salvar verificação no histórico
         try:
@@ -795,7 +795,7 @@ def verificar_alergias():
             pass
             
     else:
-        print("❌ Informações incompletas!")
+        print("Informações incompletas!")
         
     input("\nPressione ENTER para continuar...")
 
@@ -828,7 +828,7 @@ def meu_perfil():
         perfil = history_db.get_user_profile()
         
         print(f"📝 Nome: {perfil.get('name', 'Não informado')}")
-        print(f"🎯 Nível: {perfil.get('skill_level', 'iniciante').title()}")
+        print(f"Nível: {perfil.get('skill_level', 'iniciante').title()}")
         print(f"🚫 Restrições: {perfil.get('dietary_restrictions', '[]')}")
         print(f"❤️ Alergias: {perfil.get('allergies', '[]')}")
         print(f"🍽️ Cozinhas favoritas: {perfil.get('favorite_cuisines', '[]')}")
