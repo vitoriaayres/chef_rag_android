@@ -30,7 +30,7 @@ class PhotoAnalysisInterface:
         
     def setup_window(self):
         """Configura a janela principal"""
-        self.root.title("📸 Chef RAG v2 - Análise de Fotos")
+        self.root.title("Chef RAG v2 - Análise de Fotos")
         self.root.geometry("900x700")
         self.root.configure(bg='white')
         self.root.eval('tk::PlaceWindow . center')
@@ -43,7 +43,7 @@ class PhotoAnalysisInterface:
         header_frame.pack_propagate(False)
         
         title_label = tk.Label(header_frame, 
-                              text="📸 Análise de Fotos - Chef RAG v2", 
+                              text="Análise de Fotos - Chef RAG v2", 
                               font=('Arial', 18, 'bold'), 
                               bg='#FF9800', 
                               fg='white')
@@ -60,7 +60,7 @@ class PhotoAnalysisInterface:
     def setup_main_tab(self):
         """Configura aba principal"""
         self.main_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.main_frame, text="📸 Upload")
+        self.notebook.add(self.main_frame, text="Upload")
         
         # Frame de upload
         upload_frame = ttk.LabelFrame(self.main_frame, text="📁 Selecionar Foto", padding=15)

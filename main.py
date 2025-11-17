@@ -445,29 +445,29 @@ def mostrar_menu():
     """Exibe o menu principal do sistema"""
     limpar_tela()
     print("\n" + "="*70)
-    print("🧑‍🍳  CHEF RAG - Seu Assistente Culinário Inteligente")
+    print("🧑‍🍳 CHEF RAG - Assistente Culinário Inteligente")
     print("="*70)
-    print("🤖 Inteligência Artificial  |  📚 Base de Receitas  |  🎯 Análise Avançada")
+    print("Inteligência Artificial | Base de Receitas | Análise Avançada")
     print("="*70)
     
-    print("\n📸  COMO VOCÊ QUER ENCONTRAR RECEITAS HOJE?")
+    print("\nCOMO VOCÊ QUER ENCONTRAR RECEITAS HOJE?")
     print()
     print("   1. 📷 Usar Câmera do Computador")
     print("   2. 📱 Usar Câmera do Celular (QR Code)")
-    print("   3. 🖼️  Enviar Foto dos Ingredientes") 
-    print("   4. ✍️  Digitar os Ingredientes")
+    print("   3. 📸 Enviar Foto dos Ingredientes") 
+    print("   4. ✍️ Digitar os Ingredientes")
     print("   5. 🎤 Reconhecimento de Voz")
     print()
-    print("🔧  OUTRAS OPÇÕES:")
+    print("OUTRAS OPÇÕES:")
     print()
-    print("   6. 🥗 Filtrar por Dieta Especial")
-    print("   7. ⚖️  Calcular Calorias do Prato")
-    print("   8. 🚫 Verificar Alergias")
+    print("   6. Filtrar por Dieta Especial")
+    print("   7. Calcular Calorias do Prato")
+    print("   8. Verificar Alergias")
     print("   9. ⏰ Gerenciar Cronômetros")
-    print("  10. 📊 Ver Histórico de Receitas")
-    print("  11. 👤 Meu Perfil")
+    print("  10. Ver Histórico de Receitas")
+    print("  11. Meu Perfil")
     print()
-    print("  12. ❌ Sair do Sistema")
+    print("  12. Sair do Sistema")
     print()
     print("="*70)
 
@@ -539,10 +539,10 @@ def digitar_ingredientes():
         print("🔥 SISTEMA CSV DE ALTA PRECISÃO!")
         print()
         
-        ingredientes = input("🥬 Digite seus ingredientes: ").strip()
+        ingredientes = input("Digite seus ingredientes: ").strip()
         
         if not ingredientes:
-            print("❌ Nenhum ingrediente foi informado")
+            print("Nenhum ingrediente foi informado")
             input("\nPressione ENTER para continuar...")
             return
             
@@ -553,7 +553,7 @@ def digitar_ingredientes():
         else:
             print(f"\n🔍 Busca INDIVIDUAL: receitas com {ingredientes}")
             
-        print("⏳ Consultando base de receitas CSV...")
+        print("Consultando base de receitas CSV...")
         
         # Buscar usando sistema CSV
         if busca_csv:
@@ -922,7 +922,7 @@ def main():
     while True:
         try:
             mostrar_menu()
-            opcao = input("\n🎯 Digite sua escolha (1-12): ").strip()
+            opcao = input("\nDigite sua escolha (1-12): ").strip()
             
             if opcao == "1":
                 usar_camera_pc()
@@ -947,15 +947,15 @@ def main():
             elif opcao == "11":
                 meu_perfil()
             elif opcao == "12":
-                print("\n👋 Obrigado por usar o Chef RAG!")
-                print("🍽️ Bom apetite e até a próxima!")
+                print("\nObrigado por usar o Chef RAG!")
+                print("Bom apetite e até a próxima!")
                 break
             else:
-                print("\n❌ Opção inválida! Digite um número de 1 a 12.")
+                print("\nOpção inválida! Digite um número de 1 a 12.")
                 input("Pressione ENTER para continuar...")
                 
         except KeyboardInterrupt:
-            print("\n\n👋 Saindo do Chef RAG...")
+            print("\n\nSaindo do Chef RAG...")
             break
         except Exception as e:
             print(f"\n❌ Erro inesperado: {e}")
@@ -966,17 +966,17 @@ def mostrar_todas_receitas_passo_a_passo(receitas):
     Mostra todas as receitas encontradas com foco 100% no passo a passo de preparo
     """
     print("\n" + "="*80)
-    print("🍳 RECEITAS ENCONTRADAS - PASSO A PASSO COMPLETO")
+    print("RECEITAS ENCONTRADAS - PASSO A PASSO COMPLETO")
     print("="*80)
     
     for i, receita in enumerate(receitas, 1):
-        print(f"\n{'🔸'*3} RECEITA {i}: {receita['Nome'].upper()} {'🔸'*3}")
-        print(f"⏱️ Tempo: {receita['Tempo']} | 🎯 Dificuldade: {receita['Dificuldade']}")
-        print(f"🏷️ Categoria: {receita['Categoria']} | 💯 Compatibilidade: {receita['compatibility_score']:.1f}%")
+        print(f"\nRECEITA {i}: {receita['Nome'].upper()}")
+        print(f"⏱️ Tempo: {receita['Tempo']} | Dificuldade: {receita['Dificuldade']}")
+        print(f"Categoria: {receita['Categoria']} | Compatibilidade: {receita['compatibility_score']:.1f}%")
         
         # PASSO A PASSO - FOCO PRINCIPAL
-        print(f"\n🍳 MODO DE PREPARO DETALHADO:")
-        print("-" * 60)
+        print(f"\nMODO DE PREPARO:")
+        print("-" * 50)
         
         # Usar o separador correto baseado no formato do CSV
         if ' | ' in receita['Modo_de_Preparo']:
@@ -992,10 +992,10 @@ def mostrar_todas_receitas_passo_a_passo(receitas):
                     passo = passo[len(f"{j}."):].strip()
                 if not passo.endswith('.'):
                     passo += '.'
-                print(f"📝 Passo {j}: {passo}")
+                print(f"Passo {j}: {passo}")
         
         # Ingredientes como informação de apoio
-        print(f"\n🥕 INGREDIENTES NECESSÁRIOS:")
+        print(f"\nINGREDIENTES:")
         # Usar o separador correto para ingredientes
         if ' | ' in receita['Ingredientes']:
             ingredientes = receita['Ingredientes'].split(' | ')
@@ -1009,23 +1009,23 @@ def mostrar_todas_receitas_passo_a_passo(receitas):
         if i < len(receitas):
             print("\n" + "-"*80)
     
-    print(f"\n✅ Total: {len(receitas)} receita(s) encontrada(s)")
+    print(f"\nTotal: {len(receitas)} receita(s) encontrada(s)")
     print("="*80)
 
 def mostrar_modo_preparo_detalhado(receita):
     """
     Foca exclusivamente no modo de preparo da receita com máximo detalhamento
     """
-    print("\n" + "🍳"*25)
+    print("\n" + "="*50)
     print(f"    MODO DE PREPARO: {receita['Nome'].upper()}")
-    print("🍳"*25)
+    print("="*50)
     
-    print(f"\n⏱️ Tempo de Preparo: {receita['Tempo']}")
-    print(f"🎯 Nível de Dificuldade: {receita['Dificuldade']}")
-    print(f"🏷️ Categoria: {receita['Categoria']}")
+    print(f"\n⏱️ Tempo: {receita['Tempo']}")
+    print(f"Dificuldade: {receita['Dificuldade']}")
+    print(f"Categoria: {receita['Categoria']}")
     
-    print(f"\n🔥 INSTRUÇÕES PASSO A PASSO:")
-    print("="*60)
+    print(f"\nINSTRUÇÕES PASSO A PASSO:")
+    print("="*50)
     
     # Usar o separador correto baseado no formato do CSV
     if ' | ' in receita['Modo_de_Preparo']:
@@ -1041,11 +1041,9 @@ def mostrar_modo_preparo_detalhado(receita):
                 passo = passo[len(f"{i}."):].strip()
             if not passo.endswith('.'):
                 passo += '.'
-            print(f"\n📋 PASSO {i}:")
-            print(f"   {passo}")
-            print("   " + "-"*50)
+            print(f"\nPasso {i}: {passo}")
     
-    print(f"\n💡 INGREDIENTES UTILIZADOS:")
+    print(f"\nINGREDIENTES:")
     # Usar o separador correto para ingredientes
     if ' | ' in receita['Ingredientes']:
         ingredientes = receita['Ingredientes'].split(' | ')
@@ -1054,11 +1052,11 @@ def mostrar_modo_preparo_detalhado(receita):
     
     for ingrediente in ingredientes:
         if ingrediente.strip():
-            print(f"   🥄 {ingrediente.strip()}")
+            print(f"   • {ingrediente.strip()}")
     
-    print("\n" + "🍳"*25)
-    print("    ✅ PRONTO PARA COZINHAR!")
-    print("🍳"*25)
+    print("\n" + "="*50)
+    print("    PRONTO PARA COZINHAR!")
+    print("="*50)
 
 if __name__ == "__main__":
     main()

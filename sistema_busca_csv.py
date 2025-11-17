@@ -19,11 +19,11 @@ class BuscaReceitasCSV:
         try:
             if Path(self.csv_path).exists():
                 self.df = pd.read_csv(self.csv_path, encoding='utf-8')
-                print(f"✅ Base carregada: {len(self.df)} receitas")
+                print(f"Base carregada: {len(self.df)} receitas")
             else:
-                print(f"❌ Arquivo {self.csv_path} não encontrado")
+                print(f"Arquivo {self.csv_path} não encontrado")
         except Exception as e:
-            print(f"❌ Erro ao carregar CSV: {e}")
+            print(f"Erro ao carregar CSV: {e}")
     
     def normalizar_texto(self, texto):
         """Normaliza texto para busca (remove acentos, maiúsculas)"""
@@ -85,7 +85,7 @@ class BuscaReceitasCSV:
                 # Match exato
                 if ing_busca == ing_receita:
                     matches += 2
-                    matches_detalhados.append(f"✅ EXATO: {ing_busca}")
+                    matches_detalhados.append(f"EXATO: {ing_busca}")
                 # Match parcial (ingrediente da busca está contido na receita)
                 elif ing_busca in ing_receita:
                     matches += 1.5
@@ -103,10 +103,10 @@ class BuscaReceitasCSV:
     def buscar_receitas(self, ingredientes_texto, mostrar_debug=True):
         """Busca receitas baseadas nos ingredientes"""
         if self.df is None:
-            return "❌ Base de receitas não carregada"
+            return "Base de receitas não carregada"
         
         if not ingredientes_texto.strip():
-            return "❌ Digite ingredientes para buscar receitas"
+            return "Digite ingredientes para buscar receitas"
         
         resultados = []
         
@@ -169,7 +169,7 @@ class BuscaReceitasCSV:
     
     def busca_alternativa(self, ingredientes_texto):
         """Busca alternativa quando não há matches diretos"""
-        return f"""❌ Nenhuma receita encontrada para: {ingredientes_texto}
+        return f"""Nenhuma receita encontrada para: {ingredientes_texto}
 
 🔍 SUGESTÕES:
 • Tente ingredientes mais genéricos (ex: 'frango' ao invés de 'peito de frango')
@@ -203,7 +203,7 @@ class BuscaReceitasCSV:
         ]
         
         if receitas_categoria.empty:
-            return f"❌ Categoria '{categoria}' não encontrada"
+            return f"Categoria '{categoria}' não encontrada"
         
         resultado = f"📂 RECEITAS - {categoria.upper()}\n"
         resultado += "="*60 + "\n"
