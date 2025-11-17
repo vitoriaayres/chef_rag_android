@@ -19,7 +19,7 @@ import os
 
 # Importar sistema de busca CSV
 try:
-    from sistema_busca_csv import BuscaReceitasCSV
+    from scripts.sistema_busca_csv import BuscaReceitasCSV
     busca_csv = BuscaReceitasCSV()
 except ImportError:
     busca_csv = None
@@ -307,7 +307,7 @@ def abrir_interface_grafica_receita(receita_escolhida):
         print("🖥️ Abrindo interface gráfica passo a passo...")
         
         # Importar e abrir interface diretamente
-        from interface_cozinha_passo_passo_v2 import abrir_interface_passo_a_passo
+        from interfaces.interface_cozinha_passo_passo_v2 import abrir_interface_passo_a_passo
         
         # Passar receita como lista
         receitas_lista = [receita_escolhida]
@@ -472,11 +472,11 @@ def usar_camera_pc():
         
         # Tentar usar webcam com YOLO primeiro
         try:
-            from webcam_yolo import run_food_detection_webcam
+            from vision.webcam_yolo import run_food_detection_webcam
             run_food_detection_webcam()
         except ImportError:
             print("Usando câmera padrão...")
-            from webcam import run_webcam_capture
+            from vision.webcam import run_webcam_capture
             run_webcam_capture()
             
     except ImportError:
@@ -488,7 +488,7 @@ def usar_camera_pc():
 def usar_camera_celular():
     """Executa a interface da câmera do celular"""
     try:
-        from camera_mobile import start_mobile_server
+        from vision.camera_mobile import start_mobile_server
         start_mobile_server()
     except ImportError:
         print("Sistema mobile não encontrado")
@@ -499,7 +499,7 @@ def usar_camera_celular():
 def enviar_foto_ingredientes():
     """Abre interface para upload de fotos"""
     try:
-        from interface_upload_foto import PhotoAnalysisInterface
+        from interfaces.interface_upload_foto import PhotoAnalysisInterface
         app = PhotoAnalysisInterface()
         app.run()
     except ImportError as e:
@@ -682,7 +682,7 @@ def digitar_ingredientes():
 def falar_ingredientes():
     """Abre a interface de reconhecimento de voz"""
     try:
-        from reconhecimento_voz_simples import SimpleVoiceInterface
+        from audio.reconhecimento_voz_simples import SimpleVoiceInterface
         app = SimpleVoiceInterface()
         app.run()
     except ImportError as e:
@@ -695,7 +695,7 @@ def falar_ingredientes():
 def executar_historico():
     """Executa o visualizador de histórico"""
     try:
-        from visualizador_historico import main as history_main
+        from scripts.visualizador_historico import main as history_main
         history_main()
     except ImportError:
         print("Sistema de histórico não encontrado")
@@ -1066,5 +1066,4 @@ def mostrar_modo_preparo_detalhado(receita):
     print("    PRONTO PARA COZINHAR!")
     print("="*50)
 
-if __name__ == "__main__":
-    main()
+if __n
