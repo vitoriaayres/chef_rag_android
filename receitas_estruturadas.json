@@ -1,0 +1,104 @@
+{
+  "receitas": [
+    {
+      "id": "brigadeiro_saudavel",
+      "nome": "Brigadeiro Saudável",
+      "categoria": "doces",
+      "ingredientes_principais": ["chocolate", "leite", "xilitol"],
+      "ingredientes": [
+        {
+          "item": "chocolate 80%",
+          "quantidade": "200g"
+        },
+        {
+          "item": "creme de leite fresco",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "xilitol",
+          "quantidade": "1/2 xícara"
+        },
+        {
+          "item": "manteiga",
+          "quantidade": "1 colher de sopa"
+        }
+      ],
+      "modo_preparo": [
+        "Derreta o chocolate em banho-maria em fogo baixo",
+        "Adicione o creme de leite e misture bem até ficar homogêneo", 
+        "Acrescente o xilitol e misture até dissolver completamente",
+        "Adicione a manteiga e misture até obter consistência cremosa",
+        "Deixe esfriar e despeje em forminhas ou faça bolinhas",
+        "Passe no granulado e leve à geladeira por 2 horas"
+      ],
+      "tempo_preparo": "15 minutos",
+      "tempo_total": "15 minutos + 2 horas na geladeira",
+      "porcoes": "20 brigadeiros",
+      "dificuldade": "Fácil",
+      "calorias_por_porcao": 85,
+      "tags": ["saudável", "sem açúcar", "doce", "sobremesa"],
+      "equipamentos": ["panela", "fogão", "forminhas"],
+      "dicas": [
+        "Use chocolate de boa qualidade para melhor sabor",
+        "Não deixe ferver o chocolate para não queimar"
+      ]
+    },
+    {
+      "id": "bolo_chocolate",
+      "nome": "Bolo de Chocolate Econômico",
+      "categoria": "bolos",
+      "ingredientes_principais": ["chocolate", "leite", "farinha", "ovo"],
+      "ingredientes": [
+        {
+          "item": "farinha de trigo",
+          "quantidade": "2 xícaras"
+        },
+        {
+          "item": "chocolate em pó",
+          "quantidade": "1/2 xícara"
+        },
+        {
+          "item": "açúcar",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "leite",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "ovos",
+          "quantidade": "2 unidades"
+        },
+        {
+          "item": "óleo",
+          "quantidade": "1/2 xícara"
+        },
+        {
+          "item": "fermento em pó",
+          "quantidade": "1 colher de sopa"
+        }
+      ],
+      "modo_preparo": [
+        "Preaqueça o forno a 180°C e unte uma forma com manteiga",
+        "Em uma tigela, misture os ingredientes secos: farinha, chocolate em pó, açúcar e fermento",
+        "Em outra tigela, bata os ovos e adicione o leite e óleo",
+        "Misture os ingredientes líquidos com os secos até obter uma massa homogênea",
+        "Despeje a massa na forma untada",
+        "Asse por 35-40 minutos ou até que um palito saia limpo",
+        "Deixe esfriar antes de desenformar"
+      ],
+      "tempo_preparo": "20 minutos",
+      "tempo_total": "1 hora",
+      "porcoes": "12 fatias",
+      "dificuldade": "Fácil",
+      "calorias_por_porcao": 220,
+      "tags": ["econômico", "chocolate", "bolo", "sobremesa"],
+      "equipamentos": ["tigelas", "forno", "forma", "batedeira"],
+      "dicas": [
+        "Não abra o forno nos primeiros 30 minutos",
+        "Teste com palito para verificar se está assado"
+      ]
+    }
+    }
+  ]
+}

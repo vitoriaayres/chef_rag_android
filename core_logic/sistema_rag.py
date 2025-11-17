@@ -109,17 +109,17 @@ def identify_ingredient_from_image(image_path: str, multiple_ingredients: bool =
             
             if multiple_ingredients:
                 prompt = (
-                    "Identify ALL culinary ingredients visible in this image. "
-                    "Return a comma-separated list, with each ingredient in English. "
-                    "If there's only one ingredient, return just that one. "
-                    "Ignore utensils, plates or containers. "
-                    "Example: 'Tomato, Onion, Garlic' or just 'Tomato'"
+                    "Identifique TODOS os ingredientes culinários visíveis nesta imagem. "
+                    "Retorne uma lista separada por vírgulas, com cada ingrediente em português. "
+                    "Se houver apenas um ingrediente, retorne apenas esse. "
+                    "Ignore utensílios, pratos ou recipientes. "
+                    "Exemplo: 'Tomate, Cebola, Alho' ou apenas 'Tomate'"
                 )
             else:
                 prompt = (
-                    "What is this culinary ingredient? "
-                    "Respond ONLY with the ingredient name in English "
-                    "(ex: 'Tomato', 'Egg', 'Wheat Flour')."
+                    "Qual é este ingrediente culinário? "
+                    "Responda APENAS com o nome do ingrediente em português "
+                    "(ex: 'Tomate', 'Ovo', 'Farinha de Trigo')."
                 )
             
             # Usar o sistema unificado de IA
@@ -544,18 +544,51 @@ def find_recipes_by_ingredient(ingredients: str, image_path=None, source_mode: s
     """Busca receitas por ingrediente(s) - compatibilidade com monitor.py"""
     start_time = time.time()
     
-    # Verifica se temos múltiplos ingredientes
+    # Limpa a entrada removendo informações desnecessárias para o terminal
+    print("🔍 Processando busca...")
+    
+    # Verifica se temos múltiplos ingredientes (vírgula = busca CONJUNTA)
     if ',' in ingredients:
-        ingredients_list = [ing.strip() for ing in ingredients.split(',')]
+        ingredients_list = [ing.strip().lower() for ing in ingredients.split(',')]
         ingredients_list = [ing for ing in ingredients_list if ing]
         
         if len(ingredients_list) > 1:
-            print(f"🔍 Processando {len(ingredients_list)} ingredientes: {', '.join(ingredients_list)}")
-            # Busca receitas para múltiplos ingredientes
-            recipes_data = find_relevant_recipes_multiple_ingredients(ingredients_list)
-            response = generate_recipe_suggestion_multiple(ingredients_list, recipes_data, source_mode)
+            # NOVA LÓGICA: Vírgula significa busca CONJUNTA (receitas que usam ESSES ingredientes JUNTOS)
+            print(f"🔍 Buscando receitas que usem CONJUNTAMENTE: {', '.join(ingredients_list)}")
+            
+            # Usa o sistema híbrido para busca conjunta
+            try:
+                from sistema_hibrido_json_pdf import buscar_receitas_hibrido
+                receitas_encontradas = buscar_receitas_hibrido(ingredients_list)
+                
+                if receitas_encontradas:
+                    # Formata como LISTA de receitas (até 5)
+                    response = "🍽️ **RECEITAS ENCONTRADAS:**\n" + "="*50 + "\n\n"
+                    
+                    for i, receita in enumerate(receitas_encontradas[:5], 1):
+                        nome_receita = "Receita Encontrada"
+                        if "**" in receita:
+                            # Extrai nome da receita do formato markdown
+                            import re
+                            match = re.search(r'\*\*(.*?)\*\*', receita)
+                            if match:
+                                nome_receita = match.group(1)
+                        
+                        response += f"{i}. **{nome_receita}**\n"
+                        response += f"   📝 {receita[:200]}...\n\n"
+                    
+                    if len(receitas_encontradas) > 5:
+                        response += f"💡 E mais {len(receitas_encontradas) - 5} receitas disponíveis!\n"
+                        
+                else:
+                    response = f"❌ Nenhuma receita encontrada usando {', '.join(ingredients_list)} juntos."
+                    
+            except ImportError:
+                # Fallback para sistema antigo
+                recipes_data = find_relevant_recipes_multiple_ingredients(ingredients_list)
+                response = generate_recipe_suggestion_multiple(ingredients_list, recipes_data, source_mode)
         else:
-            # Apenas um ingrediente
+            # Apenas um ingrediente após limpar
             recipes_data = find_relevant_recipes(ingredients_list[0])
             response = generate_recipe_suggestion(ingredients_list[0], recipes_data, source_mode)
     else:
@@ -565,17 +598,18 @@ def find_recipes_by_ingredient(ingredients: str, image_path=None, source_mode: s
     
     processing_time = time.time() - start_time
     
-    # Registra no banco de dados
+    # Registra no banco de dados (informações relevantes apenas)
     try:
         database.history_db.add_analysis(
             ingredient=ingredients,
-            recipes_response=response,
+            recipes_response=response[:500] + "..." if len(response) > 500 else response,  # Limita tamanho
             image_path=image_path,
             source_mode=source_mode,
             processing_time=processing_time
         )
     except Exception as e:
-        print(f"⚠️ Erro ao salvar no banco: {e}")
+        # Remove logs desnecessários para terminal mais limpo
+        pass
     
     return response
 

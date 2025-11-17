@@ -1,0 +1,275 @@
+{
+  "receitas": [
+    {
+      "id": "brigadeiro_saudavel",
+      "nome": "Brigadeiro Saudável",
+      "categoria": "doces",
+      "ingredientes_principais": ["chocolate", "leite", "xilitol"],
+      "ingredientes": [
+        {
+          "item": "chocolate 80%",
+          "quantidade": "200g"
+        },
+        {
+          "item": "creme de leite fresco",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "xilitol",
+          "quantidade": "1/2 xícara"
+        },
+        {
+          "item": "manteiga",
+          "quantidade": "1 colher de sopa"
+        }
+      ],
+      "modo_preparo": [
+        "Derreta o chocolate em banho-maria em fogo baixo",
+        "Adicione o creme de leite e misture bem até ficar homogêneo", 
+        "Acrescente o xilitol e misture até dissolver completamente",
+        "Adicione a manteiga e misture até obter consistência cremosa",
+        "Deixe esfriar e despeje em forminhas ou faça bolinhas",
+        "Passe no granulado e leve à geladeira por 2 horas"
+      ],
+      "tempo_preparo": "15 minutos",
+      "tempo_total": "15 minutos + 2 horas na geladeira",
+      "porcoes": "20 brigadeiros",
+      "dificuldade": "Fácil",
+      "calorias_por_porcao": 85,
+      "tags": ["saudável", "sem açúcar", "doce", "sobremesa"],
+      "equipamentos": ["panela", "fogão", "forminhas"],
+      "dicas": [
+        "Use chocolate de boa qualidade para melhor sabor",
+        "Não deixe ferver o chocolate para não queimar"
+      ]
+    },
+    {
+      "id": "bolo_chocolate",
+      "nome": "Bolo de Chocolate Econômico",
+      "categoria": "bolos",
+      "ingredientes_principais": ["chocolate", "leite", "farinha", "ovo"],
+      "ingredientes": [
+        {
+          "item": "farinha de trigo",
+          "quantidade": "2 xícaras"
+        },
+        {
+          "item": "chocolate em pó",
+          "quantidade": "1/2 xícara"
+        },
+        {
+          "item": "açúcar",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "leite",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "ovos",
+          "quantidade": "2 unidades"
+        },
+        {
+          "item": "óleo",
+          "quantidade": "1/2 xícara"
+        },
+        {
+          "item": "fermento em pó",
+          "quantidade": "1 colher de sopa"
+        }
+      ],
+      "modo_preparo": [
+        "Preaqueça o forno a 180°C e unte uma forma com manteiga",
+        "Em uma tigela, misture os ingredientes secos: farinha, chocolate em pó, açúcar e fermento",
+        "Em outra tigela, bata os ovos e adicione o leite e óleo",
+        "Misture os ingredientes líquidos com os secos até obter uma massa homogênea",
+        "Despeje a massa na forma untada",
+        "Asse por 35-40 minutos ou até que um palito saia limpo",
+        "Deixe esfriar antes de desenformar"
+      ],
+      "tempo_preparo": "20 minutos",
+      "tempo_total": "1 hora",
+      "porcoes": "12 fatias",
+      "dificuldade": "Fácil",
+      "calorias_por_porcao": 220,
+      "tags": ["econômico", "chocolate", "bolo", "sobremesa"],
+      "equipamentos": ["tigelas", "forno", "forma", "batedeira"],
+      "dicas": [
+        "Não abra o forno nos primeiros 30 minutos",
+        "Teste com palito para verificar se está assado"
+      ]
+    },
+    {
+      "id": "sopa_legumes",
+      "nome": "Sopa de Legumes Nutritiva", 
+      "categoria": "sopas",
+      "ingredientes_principais": ["cenoura", "batata", "abobrinha", "cebola"],
+      "ingredientes": [
+        {
+          "item": "cenoura",
+          "quantidade": "2 unidades médias"
+        },
+        {
+          "item": "batata",
+          "quantidade": "3 unidades médias"
+        },
+        {
+          "item": "abobrinha",
+          "quantidade": "1 unidade média"
+        },
+        {
+          "item": "cebola",
+          "quantidade": "1 unidade média"
+        },
+        {
+          "item": "alho",
+          "quantidade": "3 dentes"
+        },
+        {
+          "item": "azeite",
+          "quantidade": "2 colheres de sopa"
+        },
+        {
+          "item": "sal",
+          "quantidade": "a gosto"
+        },
+        {
+          "item": "água",
+          "quantidade": "1 litro"
+        }
+      ],
+      "modo_preparo": [
+        "Descasque e corte todos os legumes em cubos pequenos",
+        "Refogue a cebola e o alho no azeite até dourarem",
+        "Adicione os legumes e refogue por 5 minutos",
+        "Acrescente a água e o sal",
+        "Cozinhe em fogo médio por 20-25 minutos até os legumes ficarem macios",
+        "Sirva quente, pode adicionar ervas frescas se desejar"
+      ],
+      "tempo_preparo": "15 minutos",
+      "tempo_total": "40 minutos",
+      "porcoes": "4 pratos",
+      "dificuldade": "Fácil",
+      "calorias_por_porcao": 120,
+      "tags": ["saudável", "vegetariana", "sopa", "legumes", "nutritiva"],
+      "equipamentos": ["panela", "faca", "tábua"],
+      "dicas": [
+        "Corte os legumes em tamanhos similares para cozimento uniforme",
+        "Pode bater parte da sopa no liquidificador para textura cremosa"
+      ]
+    },
+    {
+      "id": "arroz_feijao",
+      "nome": "Arroz e Feijão Tradicional",
+      "categoria": "pratos-principais", 
+      "ingredientes_principais": ["arroz", "feijão", "cebola", "alho"],
+      "ingredientes": [
+        {
+          "item": "arroz",
+          "quantidade": "2 xícaras"
+        },
+        {
+          "item": "feijão carioca",
+          "quantidade": "1 xícara"
+        },
+        {
+          "item": "cebola",
+          "quantidade": "1 unidade média"
+        },
+        {
+          "item": "alho",
+          "quantidade": "3 dentes"
+        },
+        {
+          "item": "óleo",
+          "quantidade": "2 colheres de sopa"
+        },
+        {
+          "item": "sal",
+          "quantidade": "a gosto"
+        },
+        {
+          "item": "água",
+          "quantidade": "conforme necessário"
+        }
+      ],
+      "modo_preparo": [
+        "Deixe o feijão de molho na véspera",
+        "Cozinhe o feijão na panela de pressão por 20 minutos",
+        "Refogue cebola e alho no óleo",
+        "Adicione o arroz e refogue por 2 minutos",
+        "Acrescente água quente (2 vezes o volume do arroz)",
+        "Tempere com sal e cozinhe por 18 minutos",
+        "Para o feijão: refogue cebola e alho, adicione o feijão cozido",
+        "Tempere e deixe apurar por 10 minutos"
+      ],
+      "tempo_preparo": "30 minutos",
+      "tempo_total": "1 hora",
+      "porcoes": "6 pessoas",
+      "dificuldade": "Fácil",
+      "calorias_por_porcao": 280,
+      "tags": ["brasileiro", "tradicional", "feijão", "arroz", "básico"],
+      "equipamentos": ["panela comum", "panela de pressão", "refogadeira"],
+      "dicas": [
+        "Não mexa o arroz durante o cozimento",
+        "Use água filtrada para melhor sabor"
+      ]
+    },
+    {
+      "id": "salada_verde",
+      "nome": "Salada Verde Refrescante",
+      "categoria": "saladas",
+      "ingredientes_principais": ["alface", "tomate", "pepino", "cebola"],
+      "ingredientes": [
+        {
+          "item": "alface",
+          "quantidade": "1 pé"
+        },
+        {
+          "item": "tomate",
+          "quantidade": "2 unidades médias"
+        },
+        {
+          "item": "pepino",
+          "quantidade": "1 unidade"
+        },
+        {
+          "item": "cebola roxa",
+          "quantidade": "1/2 unidade"
+        },
+        {
+          "item": "azeite extra virgem",
+          "quantidade": "2 colheres de sopa"
+        },
+        {
+          "item": "vinagre",
+          "quantidade": "1 colher de sopa"
+        },
+        {
+          "item": "sal",
+          "quantidade": "a gosto"
+        }
+      ],
+      "modo_preparo": [
+        "Lave bem todas as folhas de alface em água corrente",
+        "Seque as folhas e rasgue em pedaços médios",
+        "Corte os tomates em fatias ou cubos",
+        "Fatie o pepino em rodelas finas",
+        "Corte a cebola roxa em fatias finas",
+        "Misture todos os ingredientes em uma saladeira",
+        "Tempere com azeite, vinagre e sal na hora de servir"
+      ],
+      "tempo_preparo": "15 minutos",
+      "tempo_total": "15 minutos",
+      "porcoes": "4 pessoas",
+      "dificuldade": "Muito Fácil",
+      "calorias_por_porcao": 45,
+      "tags": ["salada", "vegetariana", "refrescante", "low-carb", "rápida"],
+      "equipamentos": ["saladeira", "faca", "tábua"],
+      "dicas": [
+        "Tempere apenas na hora de servir para não murchar",
+        "Mantenha os ingredientes gelados até o preparo"
+      ]
+    }
+  ]
+}

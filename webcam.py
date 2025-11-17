@@ -118,14 +118,14 @@ def show_analysis_popup(frame, ingredient, recipes):
                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (46, 204, 113), 2)
     
     # Número de receitas
-    recipe_count = recipes.count("Página") if recipes else 0
     cv2.putText(frame, f"Receitas encontradas: {recipe_count}", (popup_x + 20, popup_y + 110), 
                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (241, 196, 15), 1)
     
     # Instruções
     instructions = [
-        "• Verifique o terminal para ver as receitas",
-        "• Pressione qualquer tecla para continuar",
+        "• Verifique o terminal para escolher a receita",
+        "• Digite o número da receita desejada",
+        "• Pressione 0 para continuar capturando",
         "• Pressione 'Q' para sair"
     ]
     
@@ -274,35 +274,104 @@ def run_webcam_capture():
                 continue
                 
             print(f"✅ Detectado: {ingredient}")
-            print("🔍 Buscando receitas no livro...")
+            print("🔍 Buscando receitas na base...")
             last_ingredient = ingredient
             status = "success"
             
-            recipes = sistema_rag.find_recipes_by_ingredient(ingredient, SNAPSHOT_INTERVAL, "webcam")
-            recipe_count = recipes.count("Página") if recipes else 0
-            
-            if not recipes:
-                print(f"❌ Nenhuma receita encontrada para: {ingredient}")
-                status = "error"
-                recipe_count = 0
-            else:
-                print("\n🍽️ RECEITAS ENCONTRADAS:")
-                print("=" * 50)
-                print(recipes)
-                print("=" * 50)
-                show_popup = True
-                popup_timer = 0
+            # Usar sistema CSV para buscar receitas
+            try:
+                from main import extrair_receitas_csv
+                receitas = extrair_receitas_csv(ingredient)
                 
+                if receitas:
+                    recipe_count = len(receitas)
+                    print(f"\n🍽️ {recipe_count} RECEITAS ENCONTRADAS:")
+                    print("="*70)
+                    
+                    # Mostrar receitas com detalhes
+                    for i, receita in enumerate(receitas[:5], 1):
+                        print(f"\n{i}. 📋 {receita['titulo']}")
+                        print(f"   📊 Compatibilidade: {receita['score']:.1f}%")
+                        print(f"   📂 {receita['categoria']} | ⏰ {receita['tempo_preparo']}")
+                        print(f"   🥬 Ingredientes: {receita['ingredientes_busca']}")
+                        
+                        # Preview do preparo
+                        modo_preview = receita['modo_preparo'].split(' | ')[:2]
+                        print(f"   👨‍🍳 Preview: {' | '.join(modo_preview)}")
+                        if len(receita['modo_preparo'].split(' | ')) > 2:
+                            print(f"   ... e mais {len(receita['modo_preparo'].split(' | ')) - 2} passos")
+                    
+                    print("="*70)
+                    show_popup = True
+                    popup_timer = 0
+                    
+                    # Iniciar thread para seleção de receita
+                    import threading
+                    threading.Thread(target=webcam_recipe_selection, args=(receitas,)).start()
+                    
+                else:
+                    print("❌ Nenhuma receita encontrada")
+                    recipe_count = 0
+                    status = "error"
+                    
+            except Exception as e:
+                print(f"❌ Erro na busca: {e}")
+                # Fallback para sistema antigo
+                recipes = sistema_rag.find_recipes_by_ingredient(ingredient, SNAPSHOT_INTERVAL, "webcam")
+                recipe_count = recipes.count("Página") if recipes else 0
+                
+                if not recipes:
+                    print(f"❌ Nenhuma receita encontrada para: {ingredient}")
+                    status = "error"
+                    recipe_count = 0
+                else:
+                    print("\n🍽️ RECEITAS ENCONTRADAS:")
+                    print("=" * 50)
+                    print(recipes)
+                    print("=" * 50)
+                    show_popup = True
+                    popup_timer = 0
+            
             print("📷 Pronto para próxima captura...")
             
         elif key == ord('h'):
             print("\n📊 ABRINDO HISTÓRICO...")
             # Aqui poderia chamar o visualizador de histórico
             try:
-                from history_viewer import main as history_main
+                from visualizador_historico import main as history_main
                 history_main()
             except:
                 print("❌ Histórico não disponível")
+
+def webcam_recipe_selection(receitas):
+    """Thread separada para seleção de receita na webcam"""
+    try:
+        print(f"\n🎯 ESCOLHA SUA RECEITA:")
+        print("-" * 40)
+        
+        while True:
+            escolha = input(f"👨‍🍳 Digite o número da receita (1-{min(5, len(receitas))}) ou 0 para continuar: ").strip()
+            
+            if escolha == "0":
+                print("📷 Continuando captura...")
+                break
+            
+            try:
+                idx = int(escolha) - 1
+                if 0 <= idx < len(receitas[:5]):
+                    receita_escolhida = receitas[idx]
+                    
+                    # Mostrar receita completa
+                    from main import mostrar_modo_preparo_csv
+                    mostrar_modo_preparo_csv(receita_escolhida)
+                    break
+                else:
+                    print(f"❌ Digite um número entre 1 e {min(5, len(receitas))}")
+            except ValueError:
+                print("❌ Digite apenas números")
+                
+    except Exception as e:
+        print(f"❌ Erro na seleção: {e}")
 
     # Limpeza otimizada
     cap.release()
