@@ -444,16 +444,11 @@ def limpar_tela():
 def mostrar_menu():
     """Exibe o menu principal do sistema"""
     limpar_tela()
-    print("\n" + "="*70)
-    print("🧑‍🍳 CHEF RAG - Assistente Culinário Inteligente")
-    print("="*70)
-    print("Inteligência Artificial | Base de Receitas | Análise Avançada")
-    print("="*70)
+    print("\n🧑‍🍳 CHEF RAG - Assistente Culinário Inteligente\n")
     
-    print("\nCOMO VOCÊ QUER ENCONTRAR RECEITAS HOJE?")
-    print()
+    print("COMO VOCÊ QUER ENCONTRAR RECEITAS?\n")
     print("   1. 📷 Usar Câmera do Computador")
-    print("   2. 📱 Usar Câmera do Celular (QR Code)")
+    print("   2. 📱 Usar Câmera do Celular")
     print("   3. 📸 Enviar Foto dos Ingredientes") 
     print("   4. ✍️ Digitar os Ingredientes")
     print("   5. 🎤 Reconhecimento de Voz")
@@ -468,8 +463,6 @@ def mostrar_menu():
     print("  11. Meu Perfil")
     print()
     print("  12. Sair do Sistema")
-    print()
-    print("="*70)
 
 def usar_camera_pc():
     """Executa a interface da câmera do computador com YOLO"""
@@ -525,19 +518,13 @@ def enviar_foto_ingredientes():
 def digitar_ingredientes():
     """Permite digitar os ingredientes diretamente no terminal com busca conjunta"""
     limpar_tela()
-    print("\n✍️ DIGITAR INGREDIENTES")
-    print("="*50)
-    print("📝 Digite os ingredientes que você tem disponível")
-    print()
+    print("\n✍️ DIGITAR INGREDIENTES\n")
     
     try:
-        print("💡 Exemplos:")
+        print("Exemplos:")
         print("   • chocolate → receitas com chocolate")
-        print("   • chocolate, leite → receitas que usam AMBOS ingredientes")
-        print("   • tomate, cebola, alho → receitas que usam os 3 juntos")
-        print()
-        print("🔥 SISTEMA CSV DE ALTA PRECISÃO!")
-        print()
+        print("   • chocolate, leite → receitas que usam AMBOS")
+        print("   • tomate, cebola, alho → receitas que usam os 3\n")
         
         ingredientes = input("Digite seus ingredientes: ").strip()
         
@@ -965,9 +952,9 @@ def mostrar_todas_receitas_passo_a_passo(receitas):
     """
     Mostra todas as receitas encontradas com foco 100% no passo a passo de preparo
     """
-    print("\n" + "="*80)
-    print("RECEITAS ENCONTRADAS - PASSO A PASSO COMPLETO")
-    print("="*80)
+    print("\n" + "-"*60)
+    print("RECEITAS ENCONTRADAS")
+    print("-"*60)
     
     for i, receita in enumerate(receitas, 1):
         print(f"\nRECEITA {i}: {receita['Nome'].upper()}")
