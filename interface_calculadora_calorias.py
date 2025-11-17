@@ -16,7 +16,7 @@ import re
 from core_logic.database import history_db
 
 class CalorieCalculatorInterface:
-    """Interface para cálculo de calorias"""
+    """Interface para cálculo de calorias """
     
     def __init__(self):
         self.root = tk.Tk()
@@ -53,6 +53,7 @@ class CalorieCalculatorInterface:
         self.setup_calculator_tab()
         self.setup_database_tab()
         self.setup_history_tab()
+        self.setup_credits_tab()
         
     def setup_calculator_tab(self):
         """Configura aba da calculadora"""
@@ -209,6 +210,113 @@ class CalorieCalculatorInterface:
         self.history_text.pack(fill=tk.BOTH, expand=True)
         
         self.load_calculation_history()
+        
+    def setup_credits_tab(self):
+        """Configura aba de créditos"""
+        self.credits_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.credits_frame, text="🎆 Créditos")
+        
+        # Frame principal dos créditos
+        main_credits_frame = tk.Frame(self.credits_frame, bg='white', padx=20, pady=20)
+        main_credits_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Título
+        title_label = tk.Label(main_credits_frame, 
+                              text="🧑‍🍳 Chef RAG - Créditos", 
+                              font=('Arial', 20, 'bold'), 
+                              fg='#FF5722', 
+                              bg='white')
+        title_label.pack(pady=(0, 20))
+        
+        # Separator
+        separator = tk.Frame(main_credits_frame, height=2, bg='#FF5722')
+        separator.pack(fill=tk.X, pady=(0, 20))
+        
+        # Desenvolvido por
+        dev_frame = tk.Frame(main_credits_frame, bg='white')
+        dev_frame.pack(fill=tk.X, pady=(0, 15))
+        
+        tk.Label(dev_frame, 
+                text="📋 DESENVOLVIDO POR:", 
+                font=('Arial', 14, 'bold'), 
+                fg='#333', 
+                bg='white').pack(anchor='w')
+        
+        tk.Label(dev_frame, 
+                text="   • Vitória Ayres", 
+                font=('Arial', 12), 
+                fg='#666', 
+                bg='white').pack(anchor='w', padx=(20, 0))
+        
+        # Tecnologias
+        tech_frame = tk.Frame(main_credits_frame, bg='white')
+        tech_frame.pack(fill=tk.X, pady=(0, 15))
+        
+        tk.Label(tech_frame, 
+                text="🛠️ TECNOLOGIAS ENVOLVIDAS:", 
+                font=('Arial', 14, 'bold'), 
+                fg='#333', 
+                bg='white').pack(anchor='w')
+        
+        tecnologias = [
+            "Python", "LangChain", "ChromaDB", "OpenCV", 
+            "YOLO", "Tkinter", "SQLite", "Pandas", 
+            "Speech Recognition", "Flask", "RAG"
+        ]
+        
+        tech_row = None
+        for i, tech in enumerate(tecnologias):
+            if i % 2 == 0:  # Criar nova linha a cada 2 itens
+                tech_row = tk.Frame(tech_frame, bg='white')
+                tech_row.pack(fill=tk.X, padx=(20, 0))
+            
+            if tech_row:
+                tk.Label(tech_row, 
+                        text=f"• {tech}", 
+                        font=('Arial', 11), 
+                        fg='#666', 
+                        bg='white').pack(side=tk.LEFT, padx=(0, 20))
+        
+        # Funcionalidades
+        func_frame = tk.Frame(main_credits_frame, bg='white')
+        func_frame.pack(fill=tk.X, pady=(15, 0))
+        
+        tk.Label(func_frame, 
+                text="🎯 FUNCIONALIDADES:", 
+                font=('Arial', 14, 'bold'), 
+                fg='#333', 
+                bg='white').pack(anchor='w')
+        
+        funcionalidades = [
+            "Reconhecimento de ingredientes por imagem",
+            "Reconhecimento de voz",
+            "Sistema de busca inteligente",
+            "Filtros dietéticos",
+            "Calculadora de calorias",
+            "Verificador de alergias",
+            "Cronômetros de cozinha",
+            "Interface mobile"
+        ]
+        
+        for func in funcionalidades:
+            tk.Label(func_frame, 
+                    text=f"   • {func}", 
+                    font=('Arial', 11), 
+                    fg='#666', 
+                    bg='white').pack(anchor='w', padx=(20, 0))
+        
+        # Rodapé
+        footer_frame = tk.Frame(main_credits_frame, bg='white')
+        footer_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=(30, 0))
+        
+        separator2 = tk.Frame(footer_frame, height=1, bg='#DDD')
+        separator2.pack(fill=tk.X, pady=(0, 10))
+        
+        tk.Label(footer_frame, 
+                text="Chef RAG v2 - Sistema de Assistência Culinária Inteligente", 
+                font=('Arial', 10, 'italic'), 
+                fg='#999', 
+                bg='white').pack()
         
     def setup_calorie_database(self):
         """Configura base de dados de calorias"""
