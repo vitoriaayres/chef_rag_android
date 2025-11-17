@@ -209,7 +209,7 @@ def mostrar_modo_preparo(receita_escolhida):
     texto_completo = receita_escolhida.get('texto_completo', '')
     
     print("\n" + "="*80)
-        print(f"COZINHANDO: {nome}")
+    print(f"COZINHANDO: {nome}")
     print("="*80)
     
     # Extrair TODAS as informações disponíveis
