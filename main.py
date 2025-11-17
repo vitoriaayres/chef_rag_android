@@ -467,24 +467,21 @@ def mostrar_menu():
 def usar_camera_pc():
     """Executa a interface da câmera do computador com YOLO"""
     try:
-        print("\n📷 Abrindo interface da câmera com detecção YOLO...")
-        print("🔥 Nova funcionalidade: Detecção múltipla de ingredientes!")
-        print("⚡ Sistema otimizado para comida")
+        print("\n📷 Abrindo câmera...")
         
         # Tentar usar webcam com YOLO primeiro
         try:
             from webcam_yolo import run_food_detection_webcam
             run_food_detection_webcam()
         except ImportError:
-            print("⚠️ YOLO não disponível, usando webcam padrão...")
+            print("Usando câmera padrão...")
             from webcam import run_webcam_capture
             run_webcam_capture()
             
     except ImportError:
-        print("❌ Sistema de câmera não encontrado")
-        print("💡 Verifique se a webcam está conectada")
+        print("Sistema de câmera não encontrado")
     except Exception as e:
-        print(f"❌ Erro na câmera: {e}")
+        print(f"Erro na câmera: {e}")
         input("\nPressione ENTER para continuar...")
 
 def usar_camera_celular():
@@ -494,10 +491,9 @@ def usar_camera_celular():
         from camera_mobile import start_mobile_server
         start_mobile_server()
     except ImportError:
-        print("❌ Sistema mobile não encontrado")
-        print("💡 Execute: pip install flask qrcode pillow")
+        print("Sistema mobile não encontrado")
     except Exception as e:
-        print(f"❌ Erro no servidor mobile: {e}")
+        print(f"Erro no servidor mobile: {e}")
         input("\nPressione ENTER para continuar...")
 
 def enviar_foto_ingredientes():
